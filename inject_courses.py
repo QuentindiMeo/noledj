@@ -15,96 +15,96 @@ import sys
 from pathlib import Path
 
 ROOT      = Path(__file__).parent
-COURSES   = ROOT / "courses"
+COURSES   = ROOT / "cours"
 HTML_FILE = ROOT / "avancement.html"
 PLACEHOLDER = "const COURSES = {};"
 
 # ── Mapping session → modules ──────────────────────────────────────────────
 # Chaque entrée : session_id → liste de (dossier_relatif, [fichiers])
-# Le dossier est relatif à courses/
+# Le dossier est relatif à cours/
 SESSION_MODULES: dict[str, list[tuple[str, list[str]]]] = {
     # Phase 1 — Python
-    "s01": [("weight0/Python", ["Module-01.md", "Module-02.md", "Module-03.md"])],
-    "s02": [("weight0/Python", ["Module-04.md", "Module-05.md", "Module-06.md"])],
-    "s03": [("weight0/Python", ["Module-07+P.md"])],
+    "s01": [("priorite0/Python", ["Module-01.md", "Module-02.md", "Module-03.md"])],
+    "s02": [("priorite0/Python", ["Module-04.md", "Module-05.md", "Module-06.md"])],
+    "s03": [("priorite0/Python", ["Module-07+P.md"])],
 
     # Phase 1 — React
-    "s04": [("weight0/React", ["Module-01.md", "Module-02.md", "Module-03.md"])],
-    "s05": [("weight0/React", ["Module-04.md", "Module-05.md", "Module-06+P.md"])],
-    "s06": [("weight1/Architecture Logicielle", ["Module-01.md"])],
+    "s04": [("priorite0/React", ["Module-01.md", "Module-02.md", "Module-03.md"])],
+    "s05": [("priorite0/React", ["Module-04.md", "Module-05.md", "Module-06+P.md"])],
+    "s06": [("priorite1/Architecture Logicielle", ["Module-01.md"])],
 
     # Phase 1 — Architecture Logicielle
-    "s07": [("weight1/Architecture Logicielle", ["Module-02.md", "Module-03.md", "Module-04.md"])],
-    "s08": [("weight1/Architecture Logicielle", ["Module-05.md", "Module-06+P.md"])],
+    "s07": [("priorite1/Architecture Logicielle", ["Module-02.md", "Module-03.md", "Module-04.md"])],
+    "s08": [("priorite1/Architecture Logicielle", ["Module-05.md", "Module-06+P.md"])],
 
     # Phase 1 — Tests Unitaires
-    "s09": [("weight1/Tests unitaires", ["Module-01.md", "Module-02.md"])],
-    "s10": [("weight1/Tests unitaires", ["Module-03.md", "Module-04.md", "Module-05.md"])],
-    "s11": [("weight1/Tests unitaires", ["Module-06.md", "Module-07.md"])],
-    "s12": [("weight1/Tests unitaires", ["Module-08.md", "Module-09+P.md"])],
+    "s09": [("priorite1/Tests unitaires", ["Module-01.md", "Module-02.md"])],
+    "s10": [("priorite1/Tests unitaires", ["Module-03.md", "Module-04.md", "Module-05.md"])],
+    "s11": [("priorite1/Tests unitaires", ["Module-06.md", "Module-07.md"])],
+    "s12": [("priorite1/Tests unitaires", ["Module-08.md", "Module-09+P.md"])],
 
     # Phase 2 — POO
-    "s13": [("weight0/POO", ["Module-01.md", "Module-02.md", "Module-03.md"])],
-    "s14": [("weight0/POO", ["Module-04.md", "Module-05.md", "Module-06.md"])],
-    "s15": [("weight0/POO", ["Module-07.md", "Module-08.md", "Module-09.md", "Module-10.md"])],
-    "s16": [("weight0/POO", ["Module-11.md", "Module-12.md"])],
+    "s13": [("priorite0/POO", ["Module-01.md", "Module-02.md", "Module-03.md"])],
+    "s14": [("priorite0/POO", ["Module-04.md", "Module-05.md", "Module-06.md"])],
+    "s15": [("priorite0/POO", ["Module-07.md", "Module-08.md", "Module-09.md", "Module-10.md"])],
+    "s16": [("priorite0/POO", ["Module-11.md", "Module-12.md"])],
 
     # Phase 2 — FastAPI
-    "s17": [("weight0/FastAPI", ["Module-01.md", "Module-02.md"])],
-    "s18": [("weight0/FastAPI", ["Module-03.md", "Module-04.md", "Module-05.md",
+    "s17": [("priorite0/FastAPI", ["Module-01.md", "Module-02.md"])],
+    "s18": [("priorite0/FastAPI", ["Module-03.md", "Module-04.md", "Module-05.md",
                                   "Module-06.md", "Module-07.md"])],
-    "s19": [("weight0/FastAPI", ["Module-08.md", "Module-09.md", "Module-10.md"])],
-    "s20": [("weight0/FastAPI", ["Module-11.md", "Module-12+P.md", "Module-13.md"])],
+    "s19": [("priorite0/FastAPI", ["Module-08.md", "Module-09.md", "Module-10.md"])],
+    "s20": [("priorite0/FastAPI", ["Module-11.md", "Module-12+P.md", "Module-13.md"])],
     # s21 : révision — pas de nouveaux fichiers
 
     # Phase 3 — AWS Identity
-    "s22": [("weight1/AWS Identity", ["Module-01.md", "Module-02.md", "Module-03.md"])],
-    "s23": [("weight1/AWS Identity", ["Module-04.md", "Module-05.md", "Module-06.md"])],
-    "s24": [("weight1/AWS Identity", ["Module-07.md", "Module-08.md",
+    "s22": [("priorite1/AWS Identity", ["Module-01.md", "Module-02.md", "Module-03.md"])],
+    "s23": [("priorite1/AWS Identity", ["Module-04.md", "Module-05.md", "Module-06.md"])],
+    "s24": [("priorite1/AWS Identity", ["Module-07.md", "Module-08.md",
                                        "Module-09.md", "Module-10.md"])],
-    "s25": [("weight1/AWS Identity", ["Projet.md"])],
+    "s25": [("priorite1/AWS Identity", ["Projet.md"])],
 
     # Phase 3 — AWS Compute
-    "s26": [("weight1/AWS Compute, Container et Orchestration",
+    "s26": [("priorite1/AWS Compute, Container et Orchestration",
              ["Module-01.md", "Module-02.md", "Module-03.md"])],
-    "s27": [("weight1/AWS Compute, Container et Orchestration",
+    "s27": [("priorite1/AWS Compute, Container et Orchestration",
              ["Module-04.md", "Module-05.md", "Module-06.md", "Module-07.md"])],
-    "s28": [("weight1/AWS Compute, Container et Orchestration",
+    "s28": [("priorite1/AWS Compute, Container et Orchestration",
              ["Module-08.md", "Module-09.md", "Module-10.md"])],
-    "s29": [("weight1/AWS Compute, Container et Orchestration",
+    "s29": [("priorite1/AWS Compute, Container et Orchestration",
              ["Module-11.md", "Module-12+P.md"])],
 
     # Phase 3 — AWS Networking
-    "s30": [("weight1/AWS Networking",
+    "s30": [("priorite1/AWS Networking",
              ["Module-01.md", "Module-02.md", "Module-03.md", "Module-04.md"])],
-    "s31": [("weight1/AWS Networking", ["Module-05.md", "Module-06.md", "Module-07.md"])],
-    "s32": [("weight1/AWS Networking", ["Module-08+P.md"])],
+    "s31": [("priorite1/AWS Networking", ["Module-05.md", "Module-06.md", "Module-07.md"])],
+    "s32": [("priorite1/AWS Networking", ["Module-08+P.md"])],
 
     # Phase 3 — AWS Database et Storage
-    "s33": [("weight1/AWS Database et Storage",
+    "s33": [("priorite1/AWS Database et Storage",
              ["Module-01.md", "Module-02.md", "Module-03.md", "Module-04.md"])],
-    "s34": [("weight1/AWS Database et Storage",
+    "s34": [("priorite1/AWS Database et Storage",
              ["Module-05.md", "Module-06.md", "Module-07.md"])],
-    "s35": [("weight1/AWS Database et Storage", ["Module-08+P.md"])],
+    "s35": [("priorite1/AWS Database et Storage", ["Module-08+P.md"])],
     # s36 : buffer — pas de fichiers
 
     # Phase 4 — SQL
-    "s37": [("weight2/SQL", ["Module-01.md", "Module-02.md",
+    "s37": [("priorite2/SQL", ["Module-01.md", "Module-02.md",
                               "Module-03.md", "Module-04.md"])],
-    "s38": [("weight2/SQL", ["Module-05.md", "Module-06.md",
+    "s38": [("priorite2/SQL", ["Module-05.md", "Module-06.md",
                               "Module-07.md", "Module-08.md"])],
-    "s39": [("weight2/SQL", ["Module-09.md", "Module-10.md",
+    "s39": [("priorite2/SQL", ["Module-09.md", "Module-10.md",
                               "Module-11.md", "Module-12.md"])],
     # s40 : SQL mini-projet pratique — pas de fichier dédié
 
     # Phase 4 — AWS Analytics
-    "s41": [("weight1/AWS Analytics", ["Module-01.md", "Module-02.md", "Module-03.md"])],
-    "s42": [("weight1/AWS Analytics", ["Module-04.md", "Module-05.md", "Module-06.md",
+    "s41": [("priorite1/AWS Analytics", ["Module-01.md", "Module-02.md", "Module-03.md"])],
+    "s42": [("priorite1/AWS Analytics", ["Module-04.md", "Module-05.md", "Module-06.md",
                                         "Module-07.md", "Module-08+P.md"])],
     # s43 : Analytics mini-projet — contenu dans Module-08+P déjà en s42
 
     # Phase 4 — AWS Kinesis
-    "s44": [("weight1/AWS Kinesis", ["Module-01.md", "Module-02.md", "Module-03+P.md"])],
+    "s44": [("priorite1/AWS Kinesis", ["Module-01.md", "Module-02.md", "Module-03+P.md"])],
     # s45 : Kinesis mini-projet — contenu dans Module-03+P déjà en s44
 
     # Phase 5 (s46-s59) : Senior push — pas de fichiers de cours dédiés
@@ -118,7 +118,7 @@ def extract_title(content: str, filename: str) -> str:
     return title if title else filename.replace(".md", "")
 
 
-def read_module_meta(course_dir: str, filename: str) -> dict | None:
+def read_module_meta(course_dir: str, filename: str) -> dict[str, str] | None:
     path = COURSES / course_dir / filename
     if not path.exists():
         print(f"  ⚠  ABSENT : {path.relative_to(ROOT)}")
@@ -132,10 +132,10 @@ def read_module_meta(course_dir: str, filename: str) -> dict | None:
     }
 
 
-def build_index() -> dict:
-    index: dict[str, list[dict]] = {}
+def build_index() -> dict[str, list[dict[str, str]]]:
+    index: dict[str, list[dict[str, str]]] = {}
     for sid, groups in SESSION_MODULES.items():
-        modules: list[dict] = []
+        modules: list[dict[str, str]] = []
         for course_dir, filenames in groups:
             for fname in filenames:
                 meta = read_module_meta(course_dir, fname)
@@ -146,7 +146,7 @@ def build_index() -> dict:
     return index
 
 
-def inject(index: dict, dry_run: bool = False) -> None:
+def inject(index: dict[str, list[dict[str, str]]], dry_run: bool = False) -> None:
     html = HTML_FILE.read_text(encoding="utf-8")
 
     if PLACEHOLDER not in html:
