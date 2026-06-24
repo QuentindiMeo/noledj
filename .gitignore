@@ -1,0 +1,6 @@
+.*/
+*.html
+ressources/
+sandbox*
+minify*
+inject*
