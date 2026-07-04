@@ -1,4 +1,14 @@
 .*/
 *.html
 ressources/
+
+# Sandbox for practice/exercises
 sandbox*
+
+# Ignore build artifacts
+__pycache__/
+dist/
+
+# Ignore coverage reports
+htmlcov/
+.coverage

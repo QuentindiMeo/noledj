@@ -1,2 +1,10 @@
 [tool.mypy]
 strict = true
+
+[project]
+name = "sandbox"
+version = "0.1.0"
+description = "A sandbox project for testing Python features."
+authors = [
+    { name = "Quentin", email = "q.dimeo@outlook.com" },
+]
