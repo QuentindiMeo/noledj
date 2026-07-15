@@ -51,7 +51,7 @@ Pour un projet seul, un dossier `components/` partagé suffit. La lib externe (n
 
 ### Structure recommandée
 
-```
+```tree
 my-ui-lib/
 ├── package.json
 ├── tsconfig.json

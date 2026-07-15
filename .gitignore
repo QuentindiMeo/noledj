@@ -4,6 +4,7 @@ ressources/
 
 # Sandbox for practice/exercises
 sandbox*
+vite-project/
 
 # Ignore build artifacts
 __pycache__/
