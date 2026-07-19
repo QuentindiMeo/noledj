@@ -1,1068 +1,2264 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="fr">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Noledj — Avancement</title>
-<style>
-:root {
-  --bg: #080810;
-  --surface: #0f0f1c;
-  --card: #14142a;
-  --border: #1f1f3a;
-  --text: #e8eaf6;
-  --muted: #6b7280;
-  --dim: #374151;
-  --success: #10b981;
-  --gold: #fbbf24;
-  --c1: #8b5cf6;
-  --c2: #6366f1;
-  --c3: #0ea5e9;
-  --c4: #f59e0b;
-  --c5: #f97316;
-}
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body {
-  background: var(--bg);
-  color: var(--text);
-  font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
-  line-height: 1.5;
-  padding: 20px;
-  max-width: 860px;
-  margin: 0 auto;
-}
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Noledj — Avancement</title>
+    <style>
+      :root {
+        --bg: #080810;
+        --surface: #0f0f1c;
+        --card: #14142a;
+        --border: #1f1f3a;
+        --text: #e8eaf6;
+        --muted: #6b7280;
+        --dim: #374151;
+        --success: #10b981;
+        --gold: #fbbf24;
+        --c1: #8b5cf6;
+        --c2: #6366f1;
+        --c3: #0ea5e9;
+        --c4: #f59e0b;
+        --c5: #f97316;
+      }
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        background: var(--bg);
+        color: var(--text);
+        font-family: "Inter", "Segoe UI", system-ui, sans-serif;
+        line-height: 1.5;
+        padding: 20px;
+        max-width: 860px;
+        margin: 0 auto;
+      }
 
-/* HEADER */
-.header { text-align: center; padding: 32px 0 16px; }
-.header h1 { font-size: 1.7rem; font-weight: 700; letter-spacing: -0.5px; }
-.header p { color: var(--muted); margin-top: 4px; font-size: 0.85rem; }
-.global-bar-wrap { margin: 16px 0 0; background: var(--border); border-radius: 999px; height: 10px; overflow: hidden; }
-.global-bar { height: 100%; background: linear-gradient(90deg, #8b5cf6, #6366f1, #0ea5e9, #f59e0b, #f97316); border-radius: 999px; transition: width 0.5s ease; }
-.global-pct { text-align: right; font-size: 0.72rem; color: var(--muted); margin-top: 4px; }
+      /* HEADER */
+      .header {
+        text-align: center;
+        padding: 32px 0 16px;
+      }
+      .header h1 {
+        font-size: 1.7rem;
+        font-weight: 700;
+        letter-spacing: -0.5px;
+      }
+      .header p {
+        color: var(--muted);
+        margin-top: 4px;
+        font-size: 0.85rem;
+      }
+      .global-bar-wrap {
+        margin: 16px 0 0;
+        background: var(--border);
+        border-radius: 999px;
+        height: 10px;
+        overflow: hidden;
+      }
+      .global-bar {
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          #8b5cf6,
+          #6366f1,
+          #0ea5e9,
+          #f59e0b,
+          #f97316
+        );
+        border-radius: 999px;
+        transition: width 0.5s ease;
+      }
+      .global-pct {
+        text-align: right;
+        font-size: 0.72rem;
+        color: var(--muted);
+        margin-top: 4px;
+      }
+      .autoscroll-toggle {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 6px;
+        font-size: 0.72rem;
+        color: var(--muted);
+        margin-top: 6px;
+        cursor: pointer;
+      }
+      .autoscroll-toggle input {
+        cursor: pointer;
+      }
 
-/* STATS */
-.stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 20px 0; }
-.stat { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; text-align: center; }
-.stat-value { font-size: 1.5rem; font-weight: 700; line-height: 1; }
-.stat-label { font-size: 0.67rem; color: var(--muted); margin-top: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
+      /* STATS */
+      .stats {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+        margin: 20px 0;
+      }
+      .stat {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 14px 16px;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+      .stat-value {
+        font-size: 1.5rem;
+        font-weight: 700;
+        line-height: 1;
+      }
+      .stat-label {
+        font-size: 0.67rem;
+        color: var(--muted);
+        margin-top: 4px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
 
-/* INDICATOR */
-.indicator { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 14px 18px; margin: 0 0 20px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
-.indicator-label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.5px; color: var(--muted); }
-.indicator-val { font-size: 1.1rem; font-weight: 700; }
-.indicator-msg { font-size: 0.8rem; margin-left: auto; font-weight: 600; }
-.ok { color: var(--success); }
-.warn { color: var(--gold); }
-.bad { color: #ef4444; }
+      /* INDICATOR */
+      .indicator {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 14px 18px;
+        margin: 0 0 20px;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        flex-wrap: wrap;
+      }
+      .indicator-label {
+        font-size: 0.7rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        color: var(--muted);
+      }
+      .indicator-val {
+        font-size: 1.1rem;
+        font-weight: 700;
+      }
+      .indicator-msg {
+        font-size: 0.8rem;
+        margin-left: auto;
+        font-weight: 600;
+      }
+      .ok {
+        color: var(--success);
+      }
+      .warn {
+        color: var(--gold);
+      }
+      .bad {
+        color: #ef4444;
+      }
 
-/* MILESTONES */
-.milestones-section { margin: 0 0 24px; }
-.section-title { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); margin-bottom: 12px; }
-.milestones-row { display: flex; align-items: flex-start; position: relative; padding: 0 16px; }
-.milestones-row::before {
-  content: '';
-  position: absolute;
-  top: 15px;
-  left: 36px;
-  right: 36px;
-  height: 2px;
-  background: var(--border);
-  z-index: 0;
-}
-.milestone { flex: 1; text-align: center; position: relative; z-index: 1; }
-.m-dot {
-  width: 30px; height: 30px; border-radius: 50%;
-  background: var(--dim); border: 2px solid var(--border);
-  display: flex; align-items: center; justify-content: center;
-  margin: 0 auto; font-size: 0.75rem; font-weight: 700;
-  transition: all 0.3s;
-}
-.milestone.done .m-dot { background: var(--gold); border-color: var(--gold); color: #000; box-shadow: 0 0 14px rgba(251,191,36,0.45); }
-.m-label { font-size: 0.62rem; color: var(--muted); margin-top: 6px; font-weight: 600; letter-spacing: 0.3px; }
-.m-date { font-size: 0.65rem; color: var(--muted); margin-top: 1px; }
-.milestone.done .m-label { color: var(--gold); }
+      /* MILESTONES */
+      .milestones-section {
+        margin: 0 0 24px;
+      }
+      .section-title {
+        font-size: 0.68rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: var(--muted);
+        margin-bottom: 12px;
+      }
+      .milestones-row {
+        display: flex;
+        align-items: flex-start;
+        position: relative;
+        padding: 0 16px;
+      }
+      .milestones-row::before {
+        content: "";
+        position: absolute;
+        top: 15px;
+        left: 36px;
+        right: 36px;
+        height: 2px;
+        background: var(--border);
+        z-index: 0;
+      }
+      .milestone {
+        flex: 1;
+        text-align: center;
+        position: relative;
+        z-index: 1;
+      }
+      .m-dot {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        background: var(--dim);
+        border: 2px solid var(--border);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto;
+        font-size: 0.75rem;
+        font-weight: 700;
+        transition: all 0.3s;
+      }
+      .milestone.done .m-dot {
+        background: var(--gold);
+        border-color: var(--gold);
+        color: #000;
+        box-shadow: 0 0 14px rgba(251, 191, 36, 0.45);
+      }
+      .m-label {
+        font-size: 0.62rem;
+        color: var(--muted);
+        margin-top: 6px;
+        font-weight: 600;
+        letter-spacing: 0.3px;
+      }
+      .m-date {
+        font-size: 0.65rem;
+        color: var(--muted);
+        margin-top: 1px;
+      }
+      .milestone.done .m-label {
+        color: var(--gold);
+      }
 
-/* PHASES */
-.phases { display: flex; flex-direction: column; gap: 10px; }
-.phase { background: var(--card); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; }
-.phase-header { display: flex; align-items: center; gap: 12px; padding: 15px 18px; cursor: pointer; user-select: none; }
-.phase-accent { width: 5px; height: 38px; border-radius: 3px; flex-shrink: 0; }
-.phase-info { flex: 1; min-width: 0; }
-.phase-name { font-weight: 600; font-size: 0.92rem; }
-.phase-meta { font-size: 0.72rem; color: var(--muted); margin-top: 2px; }
-.phase-prog-wrap { flex: 1; max-width: 160px; }
-.phase-bar { background: var(--border); border-radius: 999px; height: 5px; overflow: hidden; }
-.phase-bar-fill { height: 100%; border-radius: 999px; transition: width 0.4s; }
-.phase-pct { font-size: 0.67rem; color: var(--muted); text-align: right; margin-top: 2px; }
-.phase-chevron { color: var(--muted); font-size: 0.75rem; transition: transform 0.2s; flex-shrink: 0; }
-.phase.open .phase-chevron { transform: rotate(180deg); }
-.phase-body { display: none; padding: 4px 18px 16px; border-top: 1px solid var(--border); }
-.phase.open .phase-body { display: block; }
+      /* PHASES */
+      .phases {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+      .phase {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        overflow: hidden;
+      }
+      .phase-header {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 15px 18px;
+        cursor: pointer;
+        user-select: none;
+      }
+      .phase-accent {
+        width: 5px;
+        height: 38px;
+        border-radius: 3px;
+        flex-shrink: 0;
+      }
+      .phase-info {
+        flex: 1;
+        min-width: 0;
+      }
+      .phase-name {
+        font-weight: 600;
+        font-size: 0.92rem;
+      }
+      .phase-meta {
+        font-size: 0.72rem;
+        color: var(--muted);
+        margin-top: 2px;
+      }
+      .phase-prog-wrap {
+        flex: 1;
+        max-width: 160px;
+      }
+      .phase-bar {
+        background: var(--border);
+        border-radius: 999px;
+        height: 5px;
+        overflow: hidden;
+      }
+      .phase-bar-fill {
+        height: 100%;
+        border-radius: 999px;
+        transition: width 0.4s;
+      }
+      .phase-pct {
+        font-size: 0.67rem;
+        color: var(--muted);
+        text-align: right;
+        margin-top: 2px;
+      }
+      .phase-chevron {
+        color: var(--muted);
+        font-size: 0.75rem;
+        transition: transform 0.2s;
+        flex-shrink: 0;
+      }
+      .phase.open .phase-chevron {
+        transform: rotate(180deg);
+      }
+      .phase-body {
+        display: none;
+        padding: 4px 18px 16px;
+        border-top: 1px solid var(--border);
+      }
+      .phase.open .phase-body {
+        display: block;
+      }
 
-/* WEEK */
-.week { margin-top: 14px; }
-.week-header { display: flex; align-items: baseline; gap: 8px; margin-bottom: 6px; }
-.week-num { font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--muted); }
-.week-topic { font-size: 0.82rem; font-weight: 600; }
-.week-dates { font-size: 0.7rem; color: var(--muted); margin-left: auto; }
+      /* WEEK */
+      .week {
+        margin-top: 14px;
+      }
+      .week-header {
+        display: flex;
+        align-items: baseline;
+        gap: 8px;
+        margin-bottom: 6px;
+      }
+      .week-num {
+        font-size: 0.65rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        color: var(--muted);
+      }
+      .week-topic {
+        font-size: 0.82rem;
+        font-weight: 600;
+      }
+      .week-dates {
+        font-size: 0.7rem;
+        color: var(--muted);
+        margin-left: auto;
+      }
 
-/* SESSIONS */
-.session { display: flex; align-items: flex-start; gap: 10px; padding: 9px 10px; border-radius: 8px; margin-bottom: 3px; transition: background 0.12s; border-left: 3px solid transparent; }
-.session:hover { background: var(--surface); }
-.session.today { border-left-color: var(--gold); background: rgba(251,191,36,0.04); }
-.session.done { opacity: 0.45; }
-.session input[type="checkbox"] { width: 17px; height: 17px; margin-top: 3px; flex-shrink: 0; accent-color: var(--success); cursor: pointer; }
-.s-day { font-size: 0.76rem; font-weight: 600; color: var(--text); min-width: 84px; }
-.session.today .s-day { color: var(--gold); }
-.s-body { flex: 1; min-width: 0; }
-.s-row1 { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
-.s-label { font-size: 0.8rem; font-weight: 500; }
-.s-today-badge { font-size: 0.6rem; background: var(--gold); color: #000; border-radius: 4px; padding: 1px 5px; font-weight: 700; }
-.s-hours { font-size: 0.67rem; background: var(--border); border-radius: 4px; padding: 1px 5px; font-weight: 600; margin-left: auto; }
-.s-actual {
-  width: 2rem; font-size: 0.72rem; font-weight: 600;
-  background: var(--surface); border: 1px solid var(--border); color: var(--text);
-  border-radius: 4px; padding: 2px 6px; text-align: right;
-  font-family: inherit; -moz-appearance: textfield; appearance: textfield;
-}
-.s-actual::-webkit-outer-spin-button, .s-actual::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
-.s-actual:focus { outline: none; border-color: var(--c2); }
-.s-actual.over { border-color: var(--c5); color: var(--c5); }
-.s-actual.under { border-color: var(--success); color: var(--success); }
-.s-actual-label { font-size: 0.6rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.3px; }
-.s-details { font-size: 0.7rem; color: var(--muted); margin-top: 2px; }
-.s-label-row { display: flex; align-items: center; gap: 6px; margin-top: 1px; }
-.s-open {
-  flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center;
-  width: 20px; height: 20px; border-radius: 5px;
-  font-size: 0.78rem; text-decoration: none; cursor: pointer;
-  background: var(--surface); border: 1px solid var(--border); color: var(--muted);
-  transition: all 0.15s;
-}
-.s-open:hover { background: var(--card); border-color: var(--c2); color: var(--text); }
-.stat-sub { font-size: 0.62rem; color: var(--muted); margin-top: 3px; font-weight: 500; }
-.stat-sub b { color: var(--text); font-weight: 700; }
+      /* SESSIONS */
+      .session {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+        padding: 9px 10px;
+        border-radius: 8px;
+        margin-bottom: 3px;
+        transition: background 0.12s;
+        border-left: 3px solid transparent;
+      }
+      .session:hover {
+        background: var(--surface);
+      }
+      .session.today {
+        border-left-color: var(--gold);
+        background: rgba(251, 191, 36, 0.04);
+      }
+      .session.done {
+        opacity: 0.45;
+      }
+      .session input[type="checkbox"] {
+        width: 17px;
+        height: 17px;
+        margin-top: 3px;
+        flex-shrink: 0;
+        accent-color: var(--success);
+        cursor: pointer;
+      }
+      .s-day {
+        font-size: 0.76rem;
+        font-weight: 600;
+        color: var(--text);
+        min-width: 84px;
+      }
+      .session.today .s-day {
+        color: var(--gold);
+      }
+      .s-body {
+        flex: 1;
+        min-width: 0;
+      }
+      .s-row1 {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        flex-wrap: wrap;
+      }
+      .s-label {
+        font-size: 0.8rem;
+        font-weight: 500;
+      }
+      .s-today-badge {
+        font-size: 0.6rem;
+        background: var(--gold);
+        color: #000;
+        border-radius: 4px;
+        padding: 1px 5px;
+        font-weight: 700;
+      }
+      .s-hours {
+        font-size: 0.67rem;
+        background: var(--border);
+        border-radius: 4px;
+        padding: 1px 5px;
+        font-weight: 600;
+        margin-left: auto;
+      }
+      .s-actual {
+        width: 2rem;
+        font-size: 0.72rem;
+        font-weight: 600;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        color: var(--text);
+        border-radius: 4px;
+        padding: 2px 6px;
+        text-align: right;
+        font-family: inherit;
+        -moz-appearance: textfield;
+        appearance: textfield;
+      }
+      .s-actual::-webkit-outer-spin-button,
+      .s-actual::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+      }
+      .s-actual:focus {
+        outline: none;
+        border-color: var(--c2);
+      }
+      .s-actual.over {
+        border-color: var(--c5);
+        color: var(--c5);
+      }
+      .s-actual.under {
+        border-color: var(--success);
+        color: var(--success);
+      }
+      .s-actual-label {
+        font-size: 0.6rem;
+        color: var(--muted);
+        text-transform: uppercase;
+        letter-spacing: 0.3px;
+      }
+      .s-details {
+        font-size: 0.7rem;
+        color: var(--muted);
+        margin-top: 2px;
+      }
+      .s-label-row {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        margin-top: 1px;
+      }
+      .s-open {
+        flex-shrink: 0;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 20px;
+        height: 20px;
+        border-radius: 5px;
+        font-size: 0.78rem;
+        text-decoration: none;
+        cursor: pointer;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        color: var(--muted);
+        transition: all 0.15s;
+      }
+      .s-open:hover {
+        background: var(--card);
+        border-color: var(--c2);
+        color: var(--text);
+      }
+      .stat-sub {
+        font-size: 0.62rem;
+        color: var(--muted);
+        margin-top: 3px;
+        font-weight: 500;
+      }
+      .stat-sub b {
+        color: var(--text);
+        font-weight: 700;
+      }
 
-/* COURSE MODAL */
-.modal { position: fixed; inset: 0; z-index: 10000; display: none; }
-.modal.open { display: block; }
-.modal-backdrop {
-  position: absolute; inset: 0;
-  background: rgba(4, 4, 10, 0.78); backdrop-filter: blur(4px);
-}
-.modal-card {
-  position: relative; margin: 4vh auto; width: min(880px, 94vw); max-height: 92vh;
-  background: var(--card); border: 1px solid var(--border); border-radius: 14px;
-  display: flex; flex-direction: column; overflow: hidden;
-  box-shadow: 0 24px 60px rgba(0,0,0,0.5);
-}
-.modal-header {
-  display: flex; align-items: center; gap: 12px;
-  padding: 14px 18px; border-bottom: 1px solid var(--border);
-}
-.modal-title { font-size: 0.95rem; font-weight: 700; flex: 1; min-width: 0; }
-.modal-close {
-  background: none; border: 1px solid var(--border); color: var(--muted);
-  border-radius: 8px; width: 30px; height: 30px; cursor: pointer;
-  font-size: 0.9rem; transition: all 0.15s;
-}
-.modal-close:hover { border-color: #ef4444; color: #ef4444; }
-.modal-tabs {
-  display: flex; gap: 4px; padding: 8px 12px; flex-wrap: wrap;
-  border-bottom: 1px solid var(--border); background: var(--surface);
-}
-.modal-tabs:empty { display: none; }
-.modal-tab {
-  background: none; border: 1px solid transparent; color: var(--muted);
-  border-radius: 6px; padding: 5px 10px; font-size: 0.72rem; cursor: pointer;
-  font-family: inherit; font-weight: 600; transition: all 0.12s;
-}
-.modal-tab:hover { color: var(--text); }
-.modal-tab.active { background: var(--card); border-color: var(--border); color: var(--text); }
-.modal-body { flex: 1; overflow-y: auto; padding: 22px 28px 32px; }
-.modal-body.empty { color: var(--muted); font-style: italic; }
+      /* COURSE MODAL */
+      .modal {
+        position: fixed;
+        inset: 0;
+        z-index: 10000;
+        display: none;
+      }
+      .modal.open {
+        display: block;
+      }
+      .modal-backdrop {
+        position: absolute;
+        inset: 0;
+        background: rgba(4, 4, 10, 0.78);
+        backdrop-filter: blur(4px);
+      }
+      .modal-card {
+        position: relative;
+        margin: 4vh auto;
+        width: min(880px, 94vw);
+        max-height: 92vh;
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5);
+      }
+      .modal-header {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 14px 18px;
+        border-bottom: 1px solid var(--border);
+      }
+      .modal-title {
+        font-size: 0.95rem;
+        font-weight: 700;
+        flex: 1;
+        min-width: 0;
+      }
+      .modal-close {
+        background: none;
+        border: 1px solid var(--border);
+        color: var(--muted);
+        border-radius: 8px;
+        width: 30px;
+        height: 30px;
+        cursor: pointer;
+        font-size: 0.9rem;
+        transition: all 0.15s;
+      }
+      .modal-close:hover {
+        border-color: #ef4444;
+        color: #ef4444;
+      }
+      .modal-tabs {
+        display: flex;
+        gap: 4px;
+        padding: 8px 12px;
+        flex-wrap: wrap;
+        border-bottom: 1px solid var(--border);
+        background: var(--surface);
+      }
+      .modal-tabs:empty {
+        display: none;
+      }
+      .modal-tab {
+        background: none;
+        border: 1px solid transparent;
+        color: var(--muted);
+        border-radius: 6px;
+        padding: 5px 10px;
+        font-size: 0.72rem;
+        cursor: pointer;
+        font-family: inherit;
+        font-weight: 600;
+        transition: all 0.12s;
+      }
+      .modal-tab:hover {
+        color: var(--text);
+      }
+      .modal-tab.active {
+        background: var(--card);
+        border-color: var(--border);
+        color: var(--text);
+      }
+      .modal-body {
+        flex: 1;
+        overflow-y: auto;
+        padding: 22px 28px 32px;
+      }
+      .modal-body.empty {
+        color: var(--muted);
+        font-style: italic;
+      }
 
-/* MARKDOWN */
-.md h1, .md h2, .md h3, .md h4, .md h5, .md h6 {
-  color: var(--text); font-weight: 700; line-height: 1.25;
-  margin: 1.4em 0 0.6em;
-}
-.md h1 { font-size: 1.4rem; border-bottom: 1px solid var(--border); padding-bottom: 8px; margin-top: 0.3em; }
-.md h2 { font-size: 1.15rem; color: var(--c2); }
-.md h3 { font-size: 1rem; }
-.md h4 { font-size: 0.92rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
-.md p { margin: 0.7em 0; font-size: 0.88rem; line-height: 1.65; }
-.md ul, .md ol { margin: 0.7em 0; padding-left: 1.6em; }
-.md li { font-size: 0.88rem; line-height: 1.6; margin: 0.25em 0; }
-.md li > ul, .md li > ol { margin: 0.2em 0; }
-.md strong { color: var(--text); font-weight: 700; }
-.md em { color: var(--text); font-style: italic; }
-.md a { color: var(--c3); text-decoration: underline; text-underline-offset: 2px; }
-.md a:hover { color: var(--c2); }
-.md hr { border: none; border-top: 1px solid var(--border); margin: 1.6em 0; }
-.md code {
-  font-family: 'JetBrains Mono', 'Consolas', monospace;
-  font-size: 0.82em; background: var(--surface);
-  padding: 1px 5px; border-radius: 4px; color: var(--c4);
-  border: 1px solid var(--border);
-}
-.md pre {
-  background: var(--surface); border: 1px solid var(--border);
-  border-radius: 8px; padding: 12px 14px; overflow-x: auto;
-  margin: 0.9em 0; font-size: 0.82rem; line-height: 1.55;
-}
-.md pre code { background: none; border: none; padding: 0; color: var(--text); font-size: inherit; }
-.md blockquote {
-  margin: 0.9em 0; padding: 6px 14px; border-left: 3px solid var(--c2);
-  background: var(--surface); border-radius: 0 6px 6px 0;
-  font-size: 0.86rem; color: var(--muted);
-}
-.md table { width: 100%; border-collapse: collapse; margin: 0.9em 0; font-size: 0.82rem; }
-.md th, .md td { border: 1px solid var(--border); padding: 6px 10px; text-align: left; }
-.md th { background: var(--surface); font-weight: 700; }
+      /* MARKDOWN */
+      .md h1,
+      .md h2,
+      .md h3,
+      .md h4,
+      .md h5,
+      .md h6 {
+        color: var(--text);
+        font-weight: 700;
+        line-height: 1.25;
+        margin: 1.4em 0 0.6em;
+      }
+      .md h1 {
+        font-size: 1.4rem;
+        border-bottom: 1px solid var(--border);
+        padding-bottom: 8px;
+        margin-top: 0.3em;
+      }
+      .md h2 {
+        font-size: 1.15rem;
+        color: var(--c2);
+      }
+      .md h3 {
+        font-size: 1rem;
+      }
+      .md h4 {
+        font-size: 0.92rem;
+        color: var(--muted);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+      .md p {
+        margin: 0.7em 0;
+        font-size: 0.88rem;
+        line-height: 1.65;
+      }
+      .md ul,
+      .md ol {
+        margin: 0.7em 0;
+        padding-left: 1.6em;
+      }
+      .md li {
+        font-size: 0.88rem;
+        line-height: 1.6;
+        margin: 0.25em 0;
+      }
+      .md li > ul,
+      .md li > ol {
+        margin: 0.2em 0;
+      }
+      .md strong {
+        color: var(--text);
+        font-weight: 700;
+      }
+      .md em {
+        color: var(--text);
+        font-style: italic;
+      }
+      .md a {
+        color: var(--c3);
+        text-decoration: underline;
+        text-underline-offset: 2px;
+      }
+      .md a:hover {
+        color: var(--c2);
+      }
+      .md hr {
+        border: none;
+        border-top: 1px solid var(--border);
+        margin: 1.6em 0;
+      }
+      .md code {
+        font-family: "JetBrains Mono", "Consolas", monospace;
+        font-size: 0.82em;
+        background: var(--surface);
+        padding: 1px 5px;
+        border-radius: 4px;
+        color: var(--c4);
+        border: 1px solid var(--border);
+      }
+      .md pre {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 12px 14px;
+        overflow-x: auto;
+        margin: 0.9em 0;
+        font-size: 0.82rem;
+        line-height: 1.55;
+      }
+      .md pre code {
+        background: none;
+        border: none;
+        padding: 0;
+        color: var(--text);
+        font-size: inherit;
+      }
+      .md blockquote {
+        margin: 0.9em 0;
+        padding: 6px 14px;
+        border-left: 3px solid var(--c2);
+        background: var(--surface);
+        border-radius: 0 6px 6px 0;
+        font-size: 0.86rem;
+        color: var(--muted);
+      }
+      .md table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 0.9em 0;
+        font-size: 0.82rem;
+      }
+      .md th,
+      .md td {
+        border: 1px solid var(--border);
+        padding: 6px 10px;
+        text-align: left;
+      }
+      .md th {
+        background: var(--surface);
+        font-weight: 700;
+      }
 
-/* MILESTONE CARD inside phase */
-.phase-milestone { margin-top: 14px; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; display: flex; align-items: center; gap: 12px; transition: border-color 0.3s, background 0.3s; }
-.phase-milestone.unlocked { border-color: var(--gold); background: rgba(251,191,36,0.05); }
-.pm-icon { font-size: 1.3rem; }
-.pm-info { flex: 1; min-width: 0; }
-.pm-title { font-size: 0.82rem; font-weight: 700; }
-.pm-skills { font-size: 0.68rem; color: var(--muted); margin-top: 2px; }
-.pm-status { font-size: 0.68rem; font-weight: 700; white-space: nowrap; }
-.phase-milestone.unlocked .pm-status { color: var(--gold); }
-.phase-milestone:not(.unlocked) .pm-status { color: var(--dim); }
+      /* MILESTONE CARD inside phase */
+      .phase-milestone {
+        margin-top: 14px;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 12px 14px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        transition:
+          border-color 0.3s,
+          background 0.3s;
+      }
+      .phase-milestone.unlocked {
+        border-color: var(--gold);
+        background: rgba(251, 191, 36, 0.05);
+      }
+      .pm-icon {
+        font-size: 1.3rem;
+      }
+      .pm-info {
+        flex: 1;
+        min-width: 0;
+      }
+      .pm-title {
+        font-size: 0.82rem;
+        font-weight: 700;
+      }
+      .pm-skills {
+        font-size: 0.68rem;
+        color: var(--muted);
+        margin-top: 2px;
+      }
+      .pm-status {
+        font-size: 0.68rem;
+        font-weight: 700;
+        white-space: nowrap;
+      }
+      .phase-milestone.unlocked .pm-status {
+        color: var(--gold);
+      }
+      .phase-milestone:not(.unlocked) .pm-status {
+        color: var(--dim);
+      }
 
-/* FOOTER */
-.footer { text-align: center; margin-top: 28px; padding-top: 14px; border-top: 1px solid var(--border); }
-.btn-reset { background: none; border: 1px solid var(--dim); color: var(--muted); border-radius: 8px; padding: 6px 16px; font-size: 0.72rem; cursor: pointer; transition: all 0.15s; }
-.btn-reset:hover { border-color: #ef4444; color: #ef4444; }
-.footer-note { font-size: 0.65rem; color: var(--dim); margin-top: 8px; }
+      /* FOOTER */
+      .footer {
+        text-align: center;
+        margin-top: 28px;
+        padding-top: 14px;
+        border-top: 1px solid var(--border);
+      }
+      .btn-reset {
+        background: none;
+        border: 1px solid var(--dim);
+        color: var(--muted);
+        border-radius: 8px;
+        padding: 6px 16px;
+        font-size: 0.72rem;
+        cursor: pointer;
+        transition: all 0.15s;
+      }
+      .btn-reset:hover {
+        border-color: #ef4444;
+        color: #ef4444;
+      }
+      .footer-note {
+        font-size: 0.65rem;
+        color: var(--dim);
+        margin-top: 8px;
+      }
 
-/* CONFETTI */
-.confetti-wrap { position: fixed; top: 0; left: 0; right: 0; bottom: 0; pointer-events: none; z-index: 9999; overflow: hidden; }
-.cp { position: absolute; animation: cpfall linear forwards; border-radius: 2px; }
-@keyframes cpfall {
-  0%   { transform: translateY(-20px) rotate(0deg);   opacity: 1; }
-  100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
-}
+      /* CONFETTI */
+      .confetti-wrap {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        pointer-events: none;
+        z-index: 9999;
+        overflow: hidden;
+      }
+      .cp {
+        position: absolute;
+        animation: cpfall linear forwards;
+        border-radius: 2px;
+      }
+      @keyframes cpfall {
+        0% {
+          transform: translateY(-20px) rotate(0deg);
+          opacity: 1;
+        }
+        100% {
+          transform: translateY(110vh) rotate(720deg);
+          opacity: 0;
+        }
+      }
 
-@media (max-width: 580px) {
-  .stats { grid-template-columns: repeat(2, 1fr); }
-  .milestones-row::before { left: 16px; right: 16px; }
-}
-</style>
-</head>
-<body>
+      @media (max-width: 580px) {
+        .stats {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .milestones-row::before {
+          left: 16px;
+          right: 16px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app"></div>
+    <div id="confetti-wrap" class="confetti-wrap"></div>
 
-<div id="app"></div>
-<div id="confetti-wrap" class="confetti-wrap"></div>
-
-<div id="course-modal" class="modal" aria-hidden="true">
-  <div class="modal-backdrop" data-modal-close></div>
-  <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="course-modal-title">
-    <div class="modal-header">
-      <div class="modal-title" id="course-modal-title"></div>
-      <button class="modal-close" data-modal-close aria-label="Fermer">✕</button>
+    <div id="course-modal" class="modal" aria-hidden="true">
+      <div class="modal-backdrop" data-modal-close></div>
+      <div
+        class="modal-card"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="course-modal-title"
+      >
+        <div class="modal-header">
+          <div class="modal-title" id="course-modal-title"></div>
+          <button class="modal-close" data-modal-close aria-label="Fermer">
+            ✕
+          </button>
+        </div>
+        <div class="modal-tabs" id="course-modal-tabs"></div>
+        <div class="modal-body md" id="course-modal-body"></div>
+      </div>
     </div>
-    <div class="modal-tabs" id="course-modal-tabs"></div>
-    <div class="modal-body md" id="course-modal-body"></div>
-  </div>
-</div>
 
-<script>
-const COURSES = {
-  s01: [
-    {
-      "title":"M1 — Audit Python et plan de remédiation",
-      "path":"cours/priorite0/Python/Module-01.md"
-    },
-    {
-      "title":"M2 — Modèle de classe avancé",
-      "path":"cours/priorite0/Python/Module-02.md"
-    },
-    {
-      "title":"M3 — MRO et héritage multiple",
-      "path":"cours/priorite0/Python/Module-03.md"
-    }
-  ],
-  s02: [
-    {
-      "title":"M4 — Outils de modélisation",
-      "path":"cours/priorite0/Python/Module-04.md"
-    },
-    {
-      "title":"M5 — Concurrence et parallélisme",
-      "path":"cours/priorite0/Python/Module-05.md"
-    },
-    {
-      "title":"M6 — Décorateurs et choix de paradigme",
-      "path":"cours/priorite0/Python/Module-06.md"
-    }
-  ],
-  s03: [
-    {
-      "title":"M7 — Outillage Python",
-      "path":"cours/priorite0/Python/Module-07+P.md"
-    }
-  ],
-  s04: [
-    {
-      "title":"M1 — Audit N2 et consolidation",
-      "path":"cours/priorite0/React/Module-01.md"
-    },
-    {
-      "title":"M2 — Moteur de réconciliation",
-      "path":"cours/priorite0/React/Module-02.md"
-    },
-    {
-      "title":"M3 — Hooks de performance",
-      "path":"cours/priorite0/React/Module-03.md"
-    }
-  ],
-  s05: [
-    {
-      "title":"M4 — Patterns avancés",
-      "path":"cours/priorite0/React/Module-04.md"
-    },
-    {
-      "title":"M5 — Écosystème React",
-      "path":"cours/priorite0/React/Module-05.md"
-    },
-    {
-      "title":"M6 — Bibliothèque de composants",
-      "path":"cours/priorite0/React/Module-06+P.md"
-    }
-  ],
-  s06: [
-    {
-      "title":"M1 — Cartographie des architectures",
-      "path":"cours/priorite1/Architecture Logicielle/Module-01.md"
-    }
-  ],
-  s07: [
-    {
-      "title":"M2 — Avantages et inconvénients",
-      "path":"cours/priorite1/Architecture Logicielle/Module-02.md"
-    },
-    {
-      "title":"M3 — CQRS",
-      "path":"cours/priorite1/Architecture Logicielle/Module-03.md"
-    },
-    {
-      "title":"M4 — Décisions techniques",
-      "path":"cours/priorite1/Architecture Logicielle/Module-04.md"
-    }
-  ],
-  s08: [
-    {
-      "title":"M5 — Réglementation des données",
-      "path":"cours/priorite1/Architecture Logicielle/Module-05.md"
-    },
-    {
-      "title":"M6 — Optimisation des coûts",
-      "path":"cours/priorite1/Architecture Logicielle/Module-06+P.md"
-    }
-  ],
-  s09: [
-    {
-      "title":"M1 — Audit des pratiques N2",
-      "path":"cours/priorite1/Tests unitaires/Module-01.md"
-    },
-    {
-      "title":"M2 — Stubs vs Mocks",
-      "path":"cours/priorite1/Tests unitaires/Module-02.md"
-    }
-  ],
-  s10: [
-    {
-      "title":"M3 — TDD vs BDD",
-      "path":"cours/priorite1/Tests unitaires/Module-03.md"
-    },
-    {
-      "title":"M4 — Indépendance des tests",
-      "path":"cours/priorite1/Tests unitaires/Module-04.md"
-    },
-    {
-      "title":"M5 — Pertinence des tests unitaires",
-      "path":"cours/priorite1/Tests unitaires/Module-05.md"
-    }
-  ],
-  s11: [
-    {
-      "title":"M6 — Coverage",
-      "path":"cours/priorite1/Tests unitaires/Module-06.md"
-    },
-    {
-      "title":"M7 — TDD en pratique",
-      "path":"cours/priorite1/Tests unitaires/Module-07.md"
-    }
-  ],
-  s12: [
-    {
-      "title":"M8 — Factorisation des tests",
-      "path":"cours/priorite1/Tests unitaires/Module-08.md"
-    },
-    {
-      "title":"M9 — Golden Master Testing + mini-projet du parcours",
-      "path":"cours/priorite1/Tests unitaires/Module-09+P.md"
-    }
-  ],
-  s13: [
-    {
-      "title":"M1 — Les 4 piliers de la POO",
-      "path":"cours/priorite0/POO/Module-01.md"
-    },
-    {
-      "title":"M2 — Relations entre classes",
-      "path":"cours/priorite0/POO/Module-02.md"
-    },
-    {
-      "title":"M3 — Interface vs classe abstraite",
-      "path":"cours/priorite0/POO/Module-03.md"
-    }
-  ],
-  s14: [
-    {
-      "title":"M4 — Visibilité avancée",
-      "path":"cours/priorite0/POO/Module-04.md"
-    },
-    {
-      "title":"M5 — SOLID en détail",
-      "path":"cours/priorite0/POO/Module-05.md"
-    },
-    {
-      "title":"M6 — Méthodes et attributs statiques",
-      "path":"cours/priorite0/POO/Module-06.md"
-    }
-  ],
-  s15: [
-    {
-      "title":"M7 — Polymorphisme avancé",
-      "path":"cours/priorite0/POO/Module-07.md"
-    },
-    {
-      "title":"M8 — Patrons de conception fondamentaux",
-      "path":"cours/priorite0/POO/Module-08.md"
-    },
-    {
-      "title":"M9 — Patrons de conception secondaires",
-      "path":"cours/priorite0/POO/Module-09.md"
-    },
-    {
-      "title":"M10 — Architecture vs design",
-      "path":"cours/priorite0/POO/Module-10.md"
-    }
-  ],
-  s16: [
-    {
-      "title":"M11 — Généricité",
-      "path":"cours/priorite0/POO/Module-11.md"
-    },
-    {
-      "title":"M12 — Métaprogrammation et réflexivité",
-      "path":"cours/priorite0/POO/Module-12.md"
-    }
-  ],
-  s17: [
-    {
-      "title":"M1 — Architecture et premier serveur",
-      "path":"cours/priorite0/FastAPI/Module-01.md"
-    },
-    {
-      "title":"M2 — Routage HTTP",
-      "path":"cours/priorite0/FastAPI/Module-02.md"
-    }
-  ],
-  s18: [
-    {
-      "title":"M3 — Validation avec Pydantic",
-      "path":"cours/priorite0/FastAPI/Module-03.md"
-    },
-    {
-      "title":"M4 — Organisation modulaire",
-      "path":"cours/priorite0/FastAPI/Module-04.md"
-    },
-    {
-      "title":"M5 — Configuration et environnements",
-      "path":"cours/priorite0/FastAPI/Module-05.md"
-    },
-    {
-      "title":"M6 — Injection de dépendances",
-      "path":"cours/priorite0/FastAPI/Module-06.md"
-    },
-    {
-      "title":"M7 — Gestion des erreurs",
-      "path":"cours/priorite0/FastAPI/Module-07.md"
-    }
-  ],
-  s19: [
-    {
-      "title":"M8 — Middleware et CORS",
-      "path":"cours/priorite0/FastAPI/Module-08.md"
-    },
-    {
-      "title":"M9 — Authentification",
-      "path":"cours/priorite0/FastAPI/Module-09.md"
-    },
-    {
-      "title":"M10 — Async et tâches différées",
-      "path":"cours/priorite0/FastAPI/Module-10.md"
-    }
-  ],
-  s20: [
-    {
-      "title":"M11 — Tests d'API",
-      "path":"cours/priorite0/FastAPI/Module-11.md"
-    },
-    {
-      "title":"M12 — ASGI et comparatifs",
-      "path":"cours/priorite0/FastAPI/Module-12+P.md"
-    },
-    {
-      "title":"M13 — Approfondissement N3 (vers 2.5)",
-      "path":"cours/priorite0/FastAPI/Module-13.md"
-    }
-  ],
-  s22: [
-    {
-      "title":"M1 — Concepts IAM fondamentaux",
-      "path":"cours/priorite1/AWS Identity/Module-01.md"
-    },
-    {
-      "title":"M2 — Anatomie d'une policy",
-      "path":"cours/priorite1/AWS Identity/Module-02.md"
-    },
-    {
-      "title":"M3 — Access Keys et alternatives",
-      "path":"cours/priorite1/AWS Identity/Module-03.md"
-    }
-  ],
-  s23: [
-    {
-      "title":"M4 — Policies avancées",
-      "path":"cours/priorite1/AWS Identity/Module-04.md"
-    },
-    {
-      "title":"M5 — Assume role et STS",
-      "path":"cours/priorite1/AWS Identity/Module-05.md"
-    },
-    {
-      "title":"M6 — Moindre privilège",
-      "path":"cours/priorite1/AWS Identity/Module-06.md"
-    }
-  ],
-  s24: [
-    {
-      "title":"M7 — Cognito",
-      "path":"cours/priorite1/AWS Identity/Module-07.md"
-    },
-    {
-      "title":"M8 — Identity Center",
-      "path":"cours/priorite1/AWS Identity/Module-08.md"
-    },
-    {
-      "title":"M9 — Secrets Manager vs Parameter Store",
-      "path":"cours/priorite1/AWS Identity/Module-09.md"
-    },
-    {
-      "title":"M10 — KMS et Certificate Manager",
-      "path":"cours/priorite1/AWS Identity/Module-10.md"
-    }
-  ],
-  s25: [
-    {
-      "title":"M11 — Mini-projet final du parcours AWS Identity",
-      "path":"cours/priorite1/AWS Identity/Projet.md"
-    }
-  ],
-  s26: [
-    {
-      "title":"M1 — EC2, bases (AMI, familles, générations, User Data)",
-      "path":"cours/priorite1/AWS Compute, Container et Orchestration/Module-01.md"
-    },
-    {
-      "title":"M2 — EC2, pricing et cycle de vie",
-      "path":"cours/priorite1/AWS Compute, Container et Orchestration/Module-02.md"
-    },
-    {
-      "title":"M3 — Métriques et monitoring",
-      "path":"cours/priorite1/AWS Compute, Container et Orchestration/Module-03.md"
-    }
-  ],
-  s27: [
-    {
-      "title":"M4 — Lambda, fondamentaux",
-      "path":"cours/priorite1/AWS Compute, Container et Orchestration/Module-04.md"
-    },
-    {
-      "title":"M5 — Lambda, déclenchement",
-      "path":"cours/priorite1/AWS Compute, Container et Orchestration/Module-05.md"
-    },
-    {
-      "title":"M6 — Lambda, limitations et Layers",
-      "path":"cours/priorite1/AWS Compute, Container et Orchestration/Module-06.md"
-    },
-    {
-      "title":"M7 — AppRunner et dimension serverless",
-      "path":"cours/priorite1/AWS Compute, Container et Orchestration/Module-07.md"
-    }
-  ],
-  s28: [
-    {
-      "title":"M8 — Batch vs Lambda",
-      "path":"cours/priorite1/AWS Compute, Container et Orchestration/Module-08.md"
-    },
-    {
-      "title":"M9 — Step Functions",
-      "path":"cours/priorite1/AWS Compute, Container et Orchestration/Module-09.md"
-    },
-    {
-      "title":"M10 — ECR (Elastic Container Registry)",
-      "path":"cours/priorite1/AWS Compute, Container et Orchestration/Module-10.md"
-    }
-  ],
-  s29: [
-    {
-      "title":"M11 — ECS, bases (Fargate vs EC2, Task Definition)",
-      "path":"cours/priorite1/AWS Compute, Container et Orchestration/Module-11.md"
-    },
-    {
-      "title":"M12 — ECS, opération + mini-projet du parcours",
-      "path":"cours/priorite1/AWS Compute, Container et Orchestration/Module-12+P.md"
-    }
-  ],
-  s30: [
-    {
-      "title":"M1 — Régions, zones et IP",
-      "path":"cours/priorite1/AWS Networking/Module-01.md"
-    },
-    {
-      "title":"M2 — VPC",
-      "path":"cours/priorite1/AWS Networking/Module-02.md"
-    },
-    {
-      "title":"M3 — Sécurité réseau",
-      "path":"cours/priorite1/AWS Networking/Module-03.md"
-    },
-    {
-      "title":"M4 — Types de sous-réseaux",
-      "path":"cours/priorite1/AWS Networking/Module-04.md"
-    }
-  ],
-  s31: [
-    {
-      "title":"M5 — Route 53",
-      "path":"cours/priorite1/AWS Networking/Module-05.md"
-    },
-    {
-      "title":"M6 — CloudFront",
-      "path":"cours/priorite1/AWS Networking/Module-06.md"
-    },
-    {
-      "title":"M7 — API Gateway",
-      "path":"cours/priorite1/AWS Networking/Module-07.md"
-    }
-  ],
-  s32: [
-    {
-      "title":"M8 — Load Balancers",
-      "path":"cours/priorite1/AWS Networking/Module-08+P.md"
-    }
-  ],
-  s33: [
-    {
-      "title":"M1 — Tour d'horizon",
-      "path":"cours/priorite1/AWS Database et Storage/Module-01.md"
-    },
-    {
-      "title":"M2 — RDS / Aurora — Provisionnement",
-      "path":"cours/priorite1/AWS Database et Storage/Module-02.md"
-    },
-    {
-      "title":"M3 — RDS / Aurora — Backups",
-      "path":"cours/priorite1/AWS Database et Storage/Module-03.md"
-    },
-    {
-      "title":"M4 — DynamoDB — Bases",
-      "path":"cours/priorite1/AWS Database et Storage/Module-04.md"
-    }
-  ],
-  s34: [
-    {
-      "title":"M5 — DynamoDB — Limites et Index",
-      "path":"cours/priorite1/AWS Database et Storage/Module-05.md"
-    },
-    {
-      "title":"M6 — S3 — Concepts et Cycle de Vie",
-      "path":"cours/priorite1/AWS Database et Storage/Module-06.md"
-    },
-    {
-      "title":"M7 — EBS, EFS, S3",
-      "path":"cours/priorite1/AWS Database et Storage/Module-07.md"
-    }
-  ],
-  s35: [
-    {
-      "title":"M8 — Calcul des coûts",
-      "path":"cours/priorite1/AWS Database et Storage/Module-08+P.md"
-    }
-  ],
-  s37: [
-    {
-      "title":"M1 — Contexte SQL",
-      "path":"cours/priorite2/SQL/Module-01.md"
-    },
-    {
-      "title":"M2 — CRUD",
-      "path":"cours/priorite2/SQL/Module-02.md"
-    },
-    {
-      "title":"M3 — DDL et contraintes",
-      "path":"cours/priorite2/SQL/Module-03.md"
-    },
-    {
-      "title":"M4 — Agrégation",
-      "path":"cours/priorite2/SQL/Module-04.md"
-    }
-  ],
-  s38: [
-    {
-      "title":"M5 — Jointures et ensembles",
-      "path":"cours/priorite2/SQL/Module-05.md"
-    },
-    {
-      "title":"M6 — Lisibilité et conditions",
-      "path":"cours/priorite2/SQL/Module-06.md"
-    },
-    {
-      "title":"M7 — Transactions",
-      "path":"cours/priorite2/SQL/Module-07.md"
-    },
-    {
-      "title":"M8 — Vues",
-      "path":"cours/priorite2/SQL/Module-08.md"
-    }
-  ],
-  s39: [
-    {
-      "title":"M9 — Modélisation",
-      "path":"cours/priorite2/SQL/Module-09.md"
-    },
-    {
-      "title":"M10 — Manipulation avancée",
-      "path":"cours/priorite2/SQL/Module-10.md"
-    },
-    {
-      "title":"M11 — Sécurité",
-      "path":"cours/priorite2/SQL/Module-11.md"
-    },
-    {
-      "title":"M12 — Vers 2.5 — Approfondissement N3",
-      "path":"cours/priorite2/SQL/Module-12.md"
-    }
-  ],
-  s41: [
-    {
-      "title":"M1 — CloudWatch Logs",
-      "path":"cours/priorite1/AWS Analytics/Module-01.md"
-    },
-    {
-      "title":"M2 — CloudWatch Alerting",
-      "path":"cours/priorite1/AWS Analytics/Module-02.md"
-    },
-    {
-      "title":"M3 — Athena",
-      "path":"cours/priorite1/AWS Analytics/Module-03.md"
-    }
-  ],
-  s42: [
-    {
-      "title":"M4 — EMR",
-      "path":"cours/priorite1/AWS Analytics/Module-04.md"
-    },
-    {
-      "title":"M5 — Data Firehose",
-      "path":"cours/priorite1/AWS Analytics/Module-05.md"
-    },
-    {
-      "title":"M6 — Glue Catalog et Crawlers",
-      "path":"cours/priorite1/AWS Analytics/Module-06.md"
-    },
-    {
-      "title":"M7 — Glue Tarification et Bookmark",
-      "path":"cours/priorite1/AWS Analytics/Module-07.md"
-    },
-    {
-      "title":"M8 — Comparatifs analytics",
-      "path":"cours/priorite1/AWS Analytics/Module-08+P.md"
-    }
-  ],
-  s44: [
-    {
-      "title":"M1 — Fondamentaux",
-      "path":"cours/priorite1/AWS Kinesis/Module-01.md"
-    },
-    {
-      "title":"M2 — Comparaisons",
-      "path":"cours/priorite1/AWS Kinesis/Module-02.md"
-    },
-    {
-      "title":"M3 — Mécanique du stream",
-      "path":"cours/priorite1/AWS Kinesis/Module-03+P.md"
-    }
-  ]
-};
+    <script>
+      const COURSES = {
+        s01: [
+          {
+            title: "M1 — Audit Python et plan de remédiation",
+            path: "cours/priorite0/Python/Module-01.md",
+          },
+          {
+            title: "M2 — Modèle de classe avancé",
+            path: "cours/priorite0/Python/Module-02.md",
+          },
+          {
+            title: "M3 — MRO et héritage multiple",
+            path: "cours/priorite0/Python/Module-03.md",
+          },
+        ],
+        s02: [
+          {
+            title: "M4 — Outils de modélisation",
+            path: "cours/priorite0/Python/Module-04.md",
+          },
+          {
+            title: "M5 — Concurrence et parallélisme",
+            path: "cours/priorite0/Python/Module-05.md",
+          },
+          {
+            title: "M6 — Décorateurs et choix de paradigme",
+            path: "cours/priorite0/Python/Module-06.md",
+          },
+        ],
+        s03: [
+          {
+            title: "M7 — Outillage Python",
+            path: "cours/priorite0/Python/Module-07+P.md",
+          },
+        ],
+        s04: [
+          {
+            title: "M1 — Audit N2 et consolidation",
+            path: "cours/priorite0/React/Module-01.md",
+          },
+          {
+            title: "M2 — Moteur de réconciliation",
+            path: "cours/priorite0/React/Module-02.md",
+          },
+          {
+            title: "M3 — Hooks de performance",
+            path: "cours/priorite0/React/Module-03.md",
+          },
+        ],
+        s05: [
+          {
+            title: "M4 — Patterns avancés",
+            path: "cours/priorite0/React/Module-04.md",
+          },
+          {
+            title: "M5 — Écosystème React",
+            path: "cours/priorite0/React/Module-05.md",
+          },
+          {
+            title: "M6 — Bibliothèque de composants",
+            path: "cours/priorite0/React/Module-06+P.md",
+          },
+        ],
+        s06: [
+          {
+            title: "M1 — Cartographie des architectures",
+            path: "cours/priorite1/Architecture Logicielle/Module-01.md",
+          },
+        ],
+        s07: [
+          {
+            title: "M2 — Avantages et inconvénients",
+            path: "cours/priorite1/Architecture Logicielle/Module-02.md",
+          },
+          {
+            title: "M3 — CQRS",
+            path: "cours/priorite1/Architecture Logicielle/Module-03.md",
+          },
+          {
+            title: "M4 — Décisions techniques",
+            path: "cours/priorite1/Architecture Logicielle/Module-04.md",
+          },
+        ],
+        s08: [
+          {
+            title: "M5 — Réglementation des données",
+            path: "cours/priorite1/Architecture Logicielle/Module-05.md",
+          },
+          {
+            title: "M6 — Optimisation des coûts",
+            path: "cours/priorite1/Architecture Logicielle/Module-06+P.md",
+          },
+        ],
+        s09: [
+          {
+            title: "M1 — Audit des pratiques N2",
+            path: "cours/priorite1/Tests unitaires/Module-01.md",
+          },
+          {
+            title: "M2 — Stubs vs Mocks",
+            path: "cours/priorite1/Tests unitaires/Module-02.md",
+          },
+        ],
+        s10: [
+          {
+            title: "M3 — TDD vs BDD",
+            path: "cours/priorite1/Tests unitaires/Module-03.md",
+          },
+          {
+            title: "M4 — Indépendance des tests",
+            path: "cours/priorite1/Tests unitaires/Module-04.md",
+          },
+          {
+            title: "M5 — Pertinence des tests unitaires",
+            path: "cours/priorite1/Tests unitaires/Module-05.md",
+          },
+        ],
+        s11: [
+          {
+            title: "M6 — Coverage",
+            path: "cours/priorite1/Tests unitaires/Module-06.md",
+          },
+          {
+            title: "M7 — TDD en pratique",
+            path: "cours/priorite1/Tests unitaires/Module-07.md",
+          },
+        ],
+        s12: [
+          {
+            title: "M8 — Factorisation des tests",
+            path: "cours/priorite1/Tests unitaires/Module-08.md",
+          },
+          {
+            title: "M9 — Golden Master Testing + mini-projet du parcours",
+            path: "cours/priorite1/Tests unitaires/Module-09+P.md",
+          },
+        ],
+        s13: [
+          {
+            title: "M1 — Les 4 piliers de la POO",
+            path: "cours/priorite0/POO/Module-01.md",
+          },
+          {
+            title: "M2 — Relations entre classes",
+            path: "cours/priorite0/POO/Module-02.md",
+          },
+          {
+            title: "M3 — Interface vs classe abstraite",
+            path: "cours/priorite0/POO/Module-03.md",
+          },
+        ],
+        s14: [
+          {
+            title: "M4 — Visibilité avancée",
+            path: "cours/priorite0/POO/Module-04.md",
+          },
+          {
+            title: "M5 — SOLID en détail",
+            path: "cours/priorite0/POO/Module-05.md",
+          },
+          {
+            title: "M6 — Méthodes et attributs statiques",
+            path: "cours/priorite0/POO/Module-06.md",
+          },
+        ],
+        s15: [
+          {
+            title: "M7 — Polymorphisme avancé",
+            path: "cours/priorite0/POO/Module-07.md",
+          },
+          {
+            title: "M8 — Patrons de conception fondamentaux",
+            path: "cours/priorite0/POO/Module-08.md",
+          },
+          {
+            title: "M9 — Patrons de conception secondaires",
+            path: "cours/priorite0/POO/Module-09.md",
+          },
+          {
+            title: "M10 — Architecture vs design",
+            path: "cours/priorite0/POO/Module-10.md",
+          },
+        ],
+        s16: [
+          {
+            title: "M11 — Généricité",
+            path: "cours/priorite0/POO/Module-11.md",
+          },
+          {
+            title: "M12 — Métaprogrammation et réflexivité",
+            path: "cours/priorite0/POO/Module-12.md",
+          },
+        ],
+        s17: [
+          {
+            title: "M1 — Architecture et premier serveur",
+            path: "cours/priorite0/FastAPI/Module-01.md",
+          },
+          {
+            title: "M2 — Routage HTTP",
+            path: "cours/priorite0/FastAPI/Module-02.md",
+          },
+        ],
+        s18: [
+          {
+            title: "M3 — Validation avec Pydantic",
+            path: "cours/priorite0/FastAPI/Module-03.md",
+          },
+          {
+            title: "M4 — Organisation modulaire",
+            path: "cours/priorite0/FastAPI/Module-04.md",
+          },
+          {
+            title: "M5 — Configuration et environnements",
+            path: "cours/priorite0/FastAPI/Module-05.md",
+          },
+          {
+            title: "M6 — Injection de dépendances",
+            path: "cours/priorite0/FastAPI/Module-06.md",
+          },
+          {
+            title: "M7 — Gestion des erreurs",
+            path: "cours/priorite0/FastAPI/Module-07.md",
+          },
+        ],
+        s19: [
+          {
+            title: "M8 — Middleware et CORS",
+            path: "cours/priorite0/FastAPI/Module-08.md",
+          },
+          {
+            title: "M9 — Authentification",
+            path: "cours/priorite0/FastAPI/Module-09.md",
+          },
+          {
+            title: "M10 — Async et tâches différées",
+            path: "cours/priorite0/FastAPI/Module-10.md",
+          },
+        ],
+        s20: [
+          {
+            title: "M11 — Tests d'API",
+            path: "cours/priorite0/FastAPI/Module-11.md",
+          },
+          {
+            title: "M12 — ASGI et comparatifs",
+            path: "cours/priorite0/FastAPI/Module-12+P.md",
+          },
+          {
+            title: "M13 — Approfondissement N3 (vers 2.5)",
+            path: "cours/priorite0/FastAPI/Module-13.md",
+          },
+        ],
+        s22: [
+          {
+            title: "M1 — Concepts IAM fondamentaux",
+            path: "cours/priorite1/AWS Identity/Module-01.md",
+          },
+          {
+            title: "M2 — Anatomie d'une policy",
+            path: "cours/priorite1/AWS Identity/Module-02.md",
+          },
+          {
+            title: "M3 — Access Keys et alternatives",
+            path: "cours/priorite1/AWS Identity/Module-03.md",
+          },
+        ],
+        s23: [
+          {
+            title: "M4 — Policies avancées",
+            path: "cours/priorite1/AWS Identity/Module-04.md",
+          },
+          {
+            title: "M5 — Assume role et STS",
+            path: "cours/priorite1/AWS Identity/Module-05.md",
+          },
+          {
+            title: "M6 — Moindre privilège",
+            path: "cours/priorite1/AWS Identity/Module-06.md",
+          },
+        ],
+        s24: [
+          {
+            title: "M7 — Cognito",
+            path: "cours/priorite1/AWS Identity/Module-07.md",
+          },
+          {
+            title: "M8 — Identity Center",
+            path: "cours/priorite1/AWS Identity/Module-08.md",
+          },
+          {
+            title: "M9 — Secrets Manager vs Parameter Store",
+            path: "cours/priorite1/AWS Identity/Module-09.md",
+          },
+          {
+            title: "M10 — KMS et Certificate Manager",
+            path: "cours/priorite1/AWS Identity/Module-10.md",
+          },
+        ],
+        s25: [
+          {
+            title: "M11 — Mini-projet final du parcours AWS Identity",
+            path: "cours/priorite1/AWS Identity/Projet.md",
+          },
+        ],
+        s26: [
+          {
+            title: "M1 — EC2, bases (AMI, familles, générations, User Data)",
+            path: "cours/priorite1/AWS Compute, Container et Orchestration/Module-01.md",
+          },
+          {
+            title: "M2 — EC2, pricing et cycle de vie",
+            path: "cours/priorite1/AWS Compute, Container et Orchestration/Module-02.md",
+          },
+          {
+            title: "M3 — Métriques et monitoring",
+            path: "cours/priorite1/AWS Compute, Container et Orchestration/Module-03.md",
+          },
+        ],
+        s27: [
+          {
+            title: "M4 — Lambda, fondamentaux",
+            path: "cours/priorite1/AWS Compute, Container et Orchestration/Module-04.md",
+          },
+          {
+            title: "M5 — Lambda, déclenchement",
+            path: "cours/priorite1/AWS Compute, Container et Orchestration/Module-05.md",
+          },
+          {
+            title: "M6 — Lambda, limitations et Layers",
+            path: "cours/priorite1/AWS Compute, Container et Orchestration/Module-06.md",
+          },
+          {
+            title: "M7 — AppRunner et dimension serverless",
+            path: "cours/priorite1/AWS Compute, Container et Orchestration/Module-07.md",
+          },
+        ],
+        s28: [
+          {
+            title: "M8 — Batch vs Lambda",
+            path: "cours/priorite1/AWS Compute, Container et Orchestration/Module-08.md",
+          },
+          {
+            title: "M9 — Step Functions",
+            path: "cours/priorite1/AWS Compute, Container et Orchestration/Module-09.md",
+          },
+          {
+            title: "M10 — ECR (Elastic Container Registry)",
+            path: "cours/priorite1/AWS Compute, Container et Orchestration/Module-10.md",
+          },
+        ],
+        s29: [
+          {
+            title: "M11 — ECS, bases (Fargate vs EC2, Task Definition)",
+            path: "cours/priorite1/AWS Compute, Container et Orchestration/Module-11.md",
+          },
+          {
+            title: "M12 — ECS, opération + mini-projet du parcours",
+            path: "cours/priorite1/AWS Compute, Container et Orchestration/Module-12+P.md",
+          },
+        ],
+        s30: [
+          {
+            title: "M1 — Régions, zones et IP",
+            path: "cours/priorite1/AWS Networking/Module-01.md",
+          },
+          {
+            title: "M2 — VPC",
+            path: "cours/priorite1/AWS Networking/Module-02.md",
+          },
+          {
+            title: "M3 — Sécurité réseau",
+            path: "cours/priorite1/AWS Networking/Module-03.md",
+          },
+          {
+            title: "M4 — Types de sous-réseaux",
+            path: "cours/priorite1/AWS Networking/Module-04.md",
+          },
+        ],
+        s31: [
+          {
+            title: "M5 — Route 53",
+            path: "cours/priorite1/AWS Networking/Module-05.md",
+          },
+          {
+            title: "M6 — CloudFront",
+            path: "cours/priorite1/AWS Networking/Module-06.md",
+          },
+          {
+            title: "M7 — API Gateway",
+            path: "cours/priorite1/AWS Networking/Module-07.md",
+          },
+        ],
+        s32: [
+          {
+            title: "M8 — Load Balancers",
+            path: "cours/priorite1/AWS Networking/Module-08+P.md",
+          },
+        ],
+        s33: [
+          {
+            title: "M1 — Tour d'horizon",
+            path: "cours/priorite1/AWS Database et Storage/Module-01.md",
+          },
+          {
+            title: "M2 — RDS / Aurora — Provisionnement",
+            path: "cours/priorite1/AWS Database et Storage/Module-02.md",
+          },
+          {
+            title: "M3 — RDS / Aurora — Backups",
+            path: "cours/priorite1/AWS Database et Storage/Module-03.md",
+          },
+          {
+            title: "M4 — DynamoDB — Bases",
+            path: "cours/priorite1/AWS Database et Storage/Module-04.md",
+          },
+        ],
+        s34: [
+          {
+            title: "M5 — DynamoDB — Limites et Index",
+            path: "cours/priorite1/AWS Database et Storage/Module-05.md",
+          },
+          {
+            title: "M6 — S3 — Concepts et Cycle de Vie",
+            path: "cours/priorite1/AWS Database et Storage/Module-06.md",
+          },
+          {
+            title: "M7 — EBS, EFS, S3",
+            path: "cours/priorite1/AWS Database et Storage/Module-07.md",
+          },
+        ],
+        s35: [
+          {
+            title: "M8 — Calcul des coûts",
+            path: "cours/priorite1/AWS Database et Storage/Module-08+P.md",
+          },
+        ],
+        s37: [
+          {
+            title: "M1 — Contexte SQL",
+            path: "cours/priorite2/SQL/Module-01.md",
+          },
+          {
+            title: "M2 — CRUD",
+            path: "cours/priorite2/SQL/Module-02.md",
+          },
+          {
+            title: "M3 — DDL et contraintes",
+            path: "cours/priorite2/SQL/Module-03.md",
+          },
+          {
+            title: "M4 — Agrégation",
+            path: "cours/priorite2/SQL/Module-04.md",
+          },
+        ],
+        s38: [
+          {
+            title: "M5 — Jointures et ensembles",
+            path: "cours/priorite2/SQL/Module-05.md",
+          },
+          {
+            title: "M6 — Lisibilité et conditions",
+            path: "cours/priorite2/SQL/Module-06.md",
+          },
+          {
+            title: "M7 — Transactions",
+            path: "cours/priorite2/SQL/Module-07.md",
+          },
+          {
+            title: "M8 — Vues",
+            path: "cours/priorite2/SQL/Module-08.md",
+          },
+        ],
+        s39: [
+          {
+            title: "M9 — Modélisation",
+            path: "cours/priorite2/SQL/Module-09.md",
+          },
+          {
+            title: "M10 — Manipulation avancée",
+            path: "cours/priorite2/SQL/Module-10.md",
+          },
+          {
+            title: "M11 — Sécurité",
+            path: "cours/priorite2/SQL/Module-11.md",
+          },
+          {
+            title: "M12 — Vers 2.5 — Approfondissement N3",
+            path: "cours/priorite2/SQL/Module-12.md",
+          },
+        ],
+        s41: [
+          {
+            title: "M1 — CloudWatch Logs",
+            path: "cours/priorite1/AWS Analytics/Module-01.md",
+          },
+          {
+            title: "M2 — CloudWatch Alerting",
+            path: "cours/priorite1/AWS Analytics/Module-02.md",
+          },
+          {
+            title: "M3 — Athena",
+            path: "cours/priorite1/AWS Analytics/Module-03.md",
+          },
+        ],
+        s42: [
+          {
+            title: "M4 — EMR",
+            path: "cours/priorite1/AWS Analytics/Module-04.md",
+          },
+          {
+            title: "M5 — Data Firehose",
+            path: "cours/priorite1/AWS Analytics/Module-05.md",
+          },
+          {
+            title: "M6 — Glue Catalog et Crawlers",
+            path: "cours/priorite1/AWS Analytics/Module-06.md",
+          },
+          {
+            title: "M7 — Glue Tarification et Bookmark",
+            path: "cours/priorite1/AWS Analytics/Module-07.md",
+          },
+          {
+            title: "M8 — Comparatifs analytics",
+            path: "cours/priorite1/AWS Analytics/Module-08+P.md",
+          },
+        ],
+        s44: [
+          {
+            title: "M1 — Fondamentaux",
+            path: "cours/priorite1/AWS Kinesis/Module-01.md",
+          },
+          {
+            title: "M2 — Comparaisons",
+            path: "cours/priorite1/AWS Kinesis/Module-02.md",
+          },
+          {
+            title: "M3 — Mécanique du stream",
+            path: "cours/priorite1/AWS Kinesis/Module-03+P.md",
+          },
+        ],
+      };
 
-const PHASES = [
-  {
-    id: 1, name: "Phase 1 — Consolidation", color: "#8b5cf6",
-    dateRange: "1 juin → 28 juin",
-    weeks: [
-      { num:1, dates:"1–7 juin", topic:"Python", sessions:[
-        { id:"s01", day:"Lun 1 juin", date:"2026-06-01", hours:4, label:"Python M1–M3", details:"M1 Audit · M2 Classes avancées · M3 MRO" },
-        { id:"s02", day:"Jeu 4 juin", date:"2026-06-04", hours:4, label:"Python M4–M6", details:"M4 Outils modélisation · M5 Concurrence · M6 Décorateurs" },
-        { id:"s03", day:"Dim 7 juin", date:"2026-06-07", hours:8, label:"Python M7 + Mini-projet", details:"M7 Outillage (1,5h) · Mini-projet (6h) · avance React M1" },
-      ]},
-      { num:2, dates:"8–14 juin", topic:"React", sessions:[
-        { id:"s04", day:"Lun 8 juin",  date:"2026-06-08", hours:4, label:"React M1–M3", details:"M1 Audit · M2 Réconciliation · M3 Hooks perf" },
-        { id:"s05", day:"Jeu 11 juin", date:"2026-06-11", hours:4, label:"React M4–M6", details:"M4 Patterns · M5 Écosystème · M6 Bibliothèque" },
-        { id:"s06", day:"Dim 14 juin", date:"2026-06-14", hours:8, label:"React Mini-projet + Architecture M1–M2", details:"Mini-projet React (6h) · Architecture M1 Cartographie · avance M2" },
-      ]},
-      { num:3, dates:"15–21 juin", topic:"Architecture Logicielle", sessions:[
-        { id:"s07", day:"Lun 15 juin", date:"2026-06-15", hours:4, label:"Architecture M2–M4", details:"M2 Trade-offs · M3 CQRS · M4 Décisions tech" },
-        { id:"s08", day:"Jeu 18 juin", date:"2026-06-18", hours:4, label:"Architecture M5–M6 + Mini-projet début", details:"M5 RGPD · M6 Optimisation coûts · Mini-projet début" },
-        { id:"s09", day:"Dim 21 juin", date:"2026-06-21", hours:8, label:"Architecture Mini-projet fin + TU M1–M2", details:"Mini-projet fin (4h) · Tests Unitaires M1 Audit · M2" },
-      ]},
-      { num:4, dates:"22–28 juin", topic:"Tests Unitaires", sessions:[
-        { id:"s10", day:"Lun 22 juin", date:"2026-06-22", hours:4, label:"TU M3–M5", details:"M3 TDD vs BDD · M4 Indépendance · M5 début Pertinence" },
-        { id:"s11", day:"Jeu 25 juin", date:"2026-06-25", hours:4, label:"TU M5–M7", details:"M5 fin · M6 Coverage · M7 TDD pratique" },
-        { id:"s12", day:"Dim 28 juin", date:"2026-06-28", hours:8, label:"TU M8–M9 + Mini-projet", details:"M8 Factorisation · M9 Golden Master · Mini-projet (5h)" },
-      ]},
-    ],
-    milestone: { num:1, date:"28 juin", label:"JALON 1", skills:"Python N3 · React N2,5 · Architecture N1,5 · Tests Unitaires N3" }
-  },
-  {
-    id: 2, name: "Phase 2 — Approfondissement", color: "#6366f1",
-    dateRange: "29 juin → 19 juillet",
-    weeks: [
-      { num:5, dates:"29 juin–5 juil.", topic:"POO", sessions:[
-        { id:"s13", day:"Lun 29 juin", date:"2026-06-29", hours:4, label:"POO M1–M3", details:"M1 Piliers · M2 Relations · M3 Interface vs abstraite" },
-        { id:"s14", day:"Jeu 2 juil.", date:"2026-07-02", hours:4, label:"POO M4–M6", details:"M4 Visibilité · M5 SOLID · M6 Statiques" },
-        { id:"s15", day:"Dim 5 juil.", date:"2026-07-05", hours:8, label:"POO M7–M10", details:"M7 Polymorphisme · M8 Patterns fondamentaux · M9 Patterns secondaires · M10 Archi vs design" },
-      ]},
-      { num:6, dates:"6–12 juillet", topic:"POO mini + FastAPI", sessions:[
-        { id:"s16", day:"Lun 6 juil.",  date:"2026-07-06", hours:4, label:"POO M11–M12 + Mini-projet début", details:"M11 Généricité · M12 Métaprogrammation · Mini-projet début" },
-        { id:"s17", day:"Jeu 9 juil.",  date:"2026-07-09", hours:4, label:"POO Mini-projet fin + FastAPI M1–M2", details:"POO Mini-projet fin (3h) · FastAPI M1 Archi · M2 début" },
-        { id:"s18", day:"Dim 12 juil.", date:"2026-07-12", hours:8, label:"FastAPI M2–M7", details:"M2 fin · M3 Pydantic · M4 Routage · M5 Config · M6 DI · M7 début" },
-      ]},
-      { num:7, dates:"13–19 juillet", topic:"FastAPI fin", sessions:[
-        { id:"s19", day:"Lun 13 juil.", date:"2026-07-13", hours:4, label:"FastAPI M7–M10", details:"M7 fin · M8 Erreurs · M9 Middleware CORS · M10 début" },
-        { id:"s20", day:"Jeu 16 juil.", date:"2026-07-16", hours:4, label:"FastAPI M10–M13", details:"M10 fin · M11 Auth JWT · M12 Async · M13 ASGI" },
-        { id:"s21", day:"Dim 19 juil.", date:"2026-07-19", hours:8, label:"FastAPI Mini-projet + révision Phase 2", details:"Mini-projet (6h) · révision Phase 2 (2h)" },
-      ]},
-    ],
-    milestone: { num:2, date:"19 juillet", label:"JALON 2", skills:"POO N3 · FastAPI N2,5" }
-  },
-  {
-    id: 3, name: "Phase 3 — Fondations Cloud", color: "#0ea5e9",
-    dateRange: "20 juillet → 23 août",
-    weeks: [
-      { num:8, dates:"20–26 juillet", topic:"AWS Identity", sessions:[
-        { id:"s22", day:"Lun 20 juil.", date:"2026-07-20", hours:4, label:"AWS Identity M1–M3", details:"M1 Concepts IAM · M2 Anatomie policy · M3 Access Keys" },
-        { id:"s23", day:"Jeu 23 juil.", date:"2026-07-23", hours:4, label:"AWS Identity M4–M6", details:"M4 Policies avancées · M5 Assume role STS · M6 Moindre privilège" },
-        { id:"s24", day:"Dim 26 juil.", date:"2026-07-26", hours:8, label:"AWS Identity M7–M11", details:"M7 Cognito · M8 Identity Center · M9 Secrets · M10 KMS · M11 mini-projet module" },
-      ]},
-      { num:9, dates:"27 juil.–2 août", topic:"Identity mini + Compute", sessions:[
-        { id:"s25", day:"Lun 27 juil.", date:"2026-07-27", hours:4, label:"AWS Identity Mini-projet", details:"Mini-projet complet (4h, version essentielle)" },
-        { id:"s26", day:"Jeu 30 juil.", date:"2026-07-30", hours:4, label:"AWS Compute M1–M3", details:"M1 EC2 bases · M2 Pricing & cycle de vie · M3 Métriques" },
-        { id:"s27", day:"Dim 2 août",   date:"2026-08-02", hours:8, label:"AWS Compute M4–M8", details:"M4 Lambda bases · M5 Lambda triggers · M6 Limitations & Layers · M7 AppRunner · M8 début" },
-      ]},
-      { num:10, dates:"3–9 août", topic:"Compute fin + Networking", sessions:[
-        { id:"s28", day:"Lun 3 août", date:"2026-08-03", hours:4, label:"AWS Compute M8–M10", details:"M8 fin Batch · M9 Step Functions · M10 ECR" },
-        { id:"s29", day:"Jeu 6 août", date:"2026-08-06", hours:4, label:"AWS Compute M11–M12 + Mini-projet début", details:"M11 ECS bases · M12 ECS opération · Mini-projet début" },
-        { id:"s30", day:"Dim 9 août", date:"2026-08-09", hours:8, label:"Compute Mini-projet fin + Networking M1–M4", details:"Compute Mini-projet fin (3h) · Networking M1 Régions/IP · M2 VPC · M3 SG/ACL · M4 Subnets" },
-      ]},
-      { num:11, dates:"10–16 août", topic:"Networking fin + Database", sessions:[
-        { id:"s31", day:"Lun 10 août", date:"2026-08-10", hours:4, label:"AWS Networking M5–M7", details:"M5 Route53 · M6 CloudFront · M7 API Gateway" },
-        { id:"s32", day:"Jeu 13 août", date:"2026-08-13", hours:4, label:"Networking M8 + Mini-projet", details:"M8 Load Balancers · Mini-projet (4h, version essentielle)" },
-        { id:"s33", day:"Dim 16 août", date:"2026-08-16", hours:8, label:"AWS Database M1–M5", details:"M1 Tour d'horizon · M2 RDS provisionnement · M3 RDS backups · M4 DynamoDB bases · M5 début" },
-      ]},
-      { num:12, dates:"17–23 août", topic:"Database fin + buffer Phase 3", sessions:[
-        { id:"s34", day:"Lun 17 août", date:"2026-08-17", hours:4, label:"AWS Database M5–M7", details:"M5 fin · M6 S3 lifecycle · M7 EBS & EFS" },
-        { id:"s35", day:"Jeu 20 août", date:"2026-08-20", hours:4, label:"AWS Database M8 + Mini-projet", details:"M8 Calcul coûts · Mini-projet (4h)" },
-        { id:"s36", day:"Dim 23 août", date:"2026-08-23", hours:8, label:"Buffer Phase 3 — révision", details:"Révision modules faibles · 1-2 exercices pratiques CLI non faits" },
-      ]},
-    ],
-    milestone: { num:3, date:"23 août", label:"JALON 3", skills:"AWS Identity N2 · AWS Compute N2 · AWS Networking N2 · AWS Database & Storage N2" }
-  },
-  {
-    id: 4, name: "Phase 4 — Data & Analytics", color: "#f59e0b",
-    dateRange: "24 août → 13 sept.",
-    weeks: [
-      { num:13, dates:"24–30 août", topic:"SQL", sessions:[
-        { id:"s37", day:"Lun 24 août", date:"2026-08-24", hours:4, label:"SQL M1–M4", details:"M1 Contexte · M2 CRUD · M3 DDL contraintes · M4 Agrégation" },
-        { id:"s38", day:"Jeu 27 août", date:"2026-08-27", hours:4, label:"SQL M5–M8", details:"M5 Jointures · M6 Lisibilité · M7 Transactions · M8 Vues" },
-        { id:"s39", day:"Dim 30 août", date:"2026-08-30", hours:8, label:"SQL M9–M12", details:"M9 Modélisation · M10 Manipulation avancée · M11 Sécurité · M12 N3 approfondissement" },
-      ]},
-      { num:14, dates:"31 août–6 sept.", topic:"SQL mini + AWS Analytics", sessions:[
-        { id:"s40", day:"Lun 31 août", date:"2026-08-31", hours:4, label:"SQL Mini-projet", details:"Schéma + migrations + requêtes clés (4h)" },
-        { id:"s41", day:"Jeu 3 sept.", date:"2026-09-03", hours:4, label:"AWS Analytics M1–M3", details:"M1 CloudWatch logs · M2 CloudWatch alerting · M3 Athena" },
-        { id:"s42", day:"Dim 6 sept.", date:"2026-09-06", hours:8, label:"AWS Analytics M4–M8", details:"M4 EMR · M5 Firehose · M6 Glue Catalog · M7 Glue tarification · M8 Comparatifs" },
-      ]},
-      { num:15, dates:"7–13 sept.", topic:"Analytics mini + Kinesis", sessions:[
-        { id:"s43", day:"Lun 7 sept.",  date:"2026-09-07", hours:4, label:"AWS Analytics Mini-projet", details:"Pipeline S3→Glue→Athena + alerting (4h)" },
-        { id:"s44", day:"Jeu 10 sept.", date:"2026-09-10", hours:4, label:"AWS Kinesis M1–M3", details:"M1 Fondamentaux · M2 Comparaisons · M3 Mécanique stream" },
-        { id:"s45", day:"Dim 13 sept.", date:"2026-09-13", hours:8, label:"AWS Kinesis Mini-projet + bilan Phase 4", details:"Mini-projet (5h) · bilan Phase 4 + plan Phase 5 (3h)" },
-      ]},
-    ],
-    milestone: { num:4, date:"13 sept.", label:"JALON 4", skills:"SQL N2,5 · AWS Analytics N2 · AWS Kinesis N2 — Toutes compétences Confirmé débloquées" }
-  },
-  {
-    id: 5, name: "Phase 5 — Senior Push", color: "#f97316",
-    dateRange: "14 sept. → 15 octobre",
-    weeks: [
-      { num:16, dates:"14–20 sept.", topic:"Senior P1", sessions:[
-        { id:"s46", day:"Lun 14 sept.", date:"2026-09-14", hours:4, label:"TU Senior — mutation testing", details:"Tests de mutation · property-based testing" },
-        { id:"s47", day:"Jeu 17 sept.", date:"2026-09-17", hours:4, label:"Python Senior — métaprogrammation", details:"Métaprogrammation avancée · property-based testing" },
-        { id:"s48", day:"Dim 20 sept.", date:"2026-09-20", hours:8, label:"AWS Compute Senior", details:"EKS intro · autoscaling avancé · Lambda @ Edge" },
-      ]},
-      { num:17, dates:"21–27 sept.", topic:"Senior P2", sessions:[
-        { id:"s49", day:"Lun 21 sept.", date:"2026-09-21", hours:4, label:"FastAPI Senior — WebSockets", details:"WebSockets · SQLAlchemy async complet" },
-        { id:"s50", day:"Jeu 24 sept.", date:"2026-09-24", hours:4, label:"POO Senior — design patterns avancés", details:"Top-down TDD · design patterns avancés" },
-        { id:"s51", day:"Dim 27 sept.", date:"2026-09-27", hours:8, label:"AWS Analytics Senior — Redshift", details:"Redshift serverless · OpenSearch" },
-      ]},
-      { num:18, dates:"28 sept.–4 oct.", topic:"Mini-projets approfondis", sessions:[
-        { id:"s52", day:"Lun 28 sept.", date:"2026-09-28", hours:4, label:"Mini-projet approfondi — AWS Compute", details:"Version complète avec déploiement réel" },
-        { id:"s53", day:"Jeu 1 oct.",   date:"2026-10-01", hours:4, label:"Mini-projet approfondi — Networking", details:"VPC Peering · Transit Gateway" },
-        { id:"s54", day:"Dim 4 oct.",   date:"2026-10-04", hours:8, label:"Double session — mini-projets portfolio", details:"2-3 mini-projets les plus importants du portfolio" },
-      ]},
-      { num:19, dates:"5–11 oct.", topic:"Révision croisée", sessions:[
-        { id:"s55", day:"Lun 5 oct.",  date:"2026-10-05", hours:4, label:"POO Senior + revue mini-projets", details:"Revue des 3 mini-projets les plus faibles" },
-        { id:"s56", day:"Jeu 8 oct.",  date:"2026-10-08", hours:4, label:"Zones faibles — révision ciblée", details:"Révision modulaire des points faibles identifiés" },
-        { id:"s57", day:"Dim 11 oct.", date:"2026-10-11", hours:8, label:"Révision croisée + auto-évaluation", details:"Cross-révision · préparation bilan final" },
-      ]},
-      { num:20, dates:"12–15 oct.", topic:"Sprint final", sessions:[
-        { id:"s58", day:"Lun 12 oct.", date:"2026-10-12", hours:4, label:"Sprint final — synthèse", details:"Synthèse globale des compétences" },
-        { id:"s59", day:"Jeu 15 oct.", date:"2026-10-15", hours:4, label:"Sprint final — bilan · JALON 5", details:"Bilan final · auto-évaluation complète · Confirmé ✅" },
-      ]},
-    ],
-    milestone: { num:5, date:"15 octobre", label:"JALON 5", skills:"Toutes compétences Confirmé ✅ · Senior partiel selon buffer" }
-  },
-];
+      const PHASES = [
+        {
+          id: 1,
+          name: "Phase 1 — Consolidation",
+          color: "#8b5cf6",
+          dateRange: "1 juin → 28 juin",
+          weeks: [
+            {
+              num: 1,
+              dates: "1–7 juin",
+              topic: "Python",
+              sessions: [
+                {
+                  id: "s01",
+                  day: "Lun 1 juin",
+                  date: "2026-06-01",
+                  hours: 4,
+                  label: "Python M1–M3",
+                  details: "M1 Audit · M2 Classes avancées · M3 MRO",
+                },
+                {
+                  id: "s02",
+                  day: "Jeu 4 juin",
+                  date: "2026-06-04",
+                  hours: 4,
+                  label: "Python M4–M6",
+                  details:
+                    "M4 Outils modélisation · M5 Concurrence · M6 Décorateurs",
+                },
+                {
+                  id: "s03",
+                  day: "Dim 7 juin",
+                  date: "2026-06-07",
+                  hours: 8,
+                  label: "Python M7 + Mini-projet",
+                  details:
+                    "M7 Outillage (1,5h) · Mini-projet (6h) · avance React M1",
+                },
+              ],
+            },
+            {
+              num: 2,
+              dates: "8–14 juin",
+              topic: "React",
+              sessions: [
+                {
+                  id: "s04",
+                  day: "Lun 8 juin",
+                  date: "2026-06-08",
+                  hours: 4,
+                  label: "React M1–M3",
+                  details: "M1 Audit · M2 Réconciliation · M3 Hooks perf",
+                },
+                {
+                  id: "s05",
+                  day: "Jeu 11 juin",
+                  date: "2026-06-11",
+                  hours: 4,
+                  label: "React M4–M6",
+                  details: "M4 Patterns · M5 Écosystème · M6 Bibliothèque",
+                },
+                {
+                  id: "s06",
+                  day: "Dim 14 juin",
+                  date: "2026-06-14",
+                  hours: 8,
+                  label: "React Mini-projet + Architecture M1–M2",
+                  details:
+                    "Mini-projet React (6h) · Architecture M1 Cartographie · avance M2",
+                },
+              ],
+            },
+            {
+              num: 3,
+              dates: "15–21 juin",
+              topic: "Architecture Logicielle",
+              sessions: [
+                {
+                  id: "s07",
+                  day: "Lun 15 juin",
+                  date: "2026-06-15",
+                  hours: 4,
+                  label: "Architecture M2–M4",
+                  details: "M2 Trade-offs · M3 CQRS · M4 Décisions tech",
+                },
+                {
+                  id: "s08",
+                  day: "Jeu 18 juin",
+                  date: "2026-06-18",
+                  hours: 4,
+                  label: "Architecture M5–M6 + Mini-projet début",
+                  details:
+                    "M5 RGPD · M6 Optimisation coûts · Mini-projet début",
+                },
+                {
+                  id: "s09",
+                  day: "Dim 21 juin",
+                  date: "2026-06-21",
+                  hours: 8,
+                  label: "Architecture Mini-projet fin + TU M1–M2",
+                  details:
+                    "Mini-projet fin (4h) · Tests Unitaires M1 Audit · M2",
+                },
+              ],
+            },
+            {
+              num: 4,
+              dates: "22–28 juin",
+              topic: "Tests Unitaires",
+              sessions: [
+                {
+                  id: "s10",
+                  day: "Lun 22 juin",
+                  date: "2026-06-22",
+                  hours: 4,
+                  label: "TU M3–M5",
+                  details:
+                    "M3 TDD vs BDD · M4 Indépendance · M5 début Pertinence",
+                },
+                {
+                  id: "s11",
+                  day: "Jeu 25 juin",
+                  date: "2026-06-25",
+                  hours: 4,
+                  label: "TU M5–M7",
+                  details: "M5 fin · M6 Coverage · M7 TDD pratique",
+                },
+                {
+                  id: "s12",
+                  day: "Dim 28 juin",
+                  date: "2026-06-28",
+                  hours: 8,
+                  label: "TU M8–M9 + Mini-projet",
+                  details:
+                    "M8 Factorisation · M9 Golden Master · Mini-projet (5h)",
+                },
+              ],
+            },
+          ],
+          milestone: {
+            num: 1,
+            date: "28 juin",
+            label: "JALON 1",
+            skills:
+              "Python N3 · React N2,5 · Architecture N1,5 · Tests Unitaires N3",
+          },
+        },
+        {
+          id: 2,
+          name: "Phase 2 — Approfondissement",
+          color: "#6366f1",
+          dateRange: "29 juin → 19 juillet",
+          weeks: [
+            {
+              num: 5,
+              dates: "29 juin–5 juil.",
+              topic: "POO",
+              sessions: [
+                {
+                  id: "s13",
+                  day: "Lun 29 juin",
+                  date: "2026-06-29",
+                  hours: 4,
+                  label: "POO M1–M3",
+                  details:
+                    "M1 Piliers · M2 Relations · M3 Interface vs abstraite",
+                },
+                {
+                  id: "s14",
+                  day: "Jeu 2 juil.",
+                  date: "2026-07-02",
+                  hours: 4,
+                  label: "POO M4–M6",
+                  details: "M4 Visibilité · M5 SOLID · M6 Statiques",
+                },
+                {
+                  id: "s15",
+                  day: "Dim 5 juil.",
+                  date: "2026-07-05",
+                  hours: 8,
+                  label: "POO M7–M10",
+                  details:
+                    "M7 Polymorphisme · M8 Patterns fondamentaux · M9 Patterns secondaires · M10 Archi vs design",
+                },
+              ],
+            },
+            {
+              num: 6,
+              dates: "6–12 juillet",
+              topic: "POO mini + FastAPI",
+              sessions: [
+                {
+                  id: "s16",
+                  day: "Lun 6 juil.",
+                  date: "2026-07-06",
+                  hours: 4,
+                  label: "POO M11–M12 + Mini-projet début",
+                  details:
+                    "M11 Généricité · M12 Métaprogrammation · Mini-projet début",
+                },
+                {
+                  id: "s17",
+                  day: "Jeu 9 juil.",
+                  date: "2026-07-09",
+                  hours: 4,
+                  label: "POO Mini-projet fin + FastAPI M1–M2",
+                  details:
+                    "POO Mini-projet fin (3h) · FastAPI M1 Archi · M2 début",
+                },
+                {
+                  id: "s18",
+                  day: "Dim 12 juil.",
+                  date: "2026-07-12",
+                  hours: 8,
+                  label: "FastAPI M2–M7",
+                  details:
+                    "M2 fin · M3 Pydantic · M4 Routage · M5 Config · M6 DI · M7 début",
+                },
+              ],
+            },
+            {
+              num: 7,
+              dates: "13–19 juillet",
+              topic: "FastAPI fin",
+              sessions: [
+                {
+                  id: "s19",
+                  day: "Lun 13 juil.",
+                  date: "2026-07-13",
+                  hours: 4,
+                  label: "FastAPI M7–M10",
+                  details:
+                    "M7 fin · M8 Erreurs · M9 Middleware CORS · M10 début",
+                },
+                {
+                  id: "s20",
+                  day: "Jeu 16 juil.",
+                  date: "2026-07-16",
+                  hours: 4,
+                  label: "FastAPI M10–M13",
+                  details: "M10 fin · M11 Auth JWT · M12 Async · M13 ASGI",
+                },
+                {
+                  id: "s21",
+                  day: "Dim 19 juil.",
+                  date: "2026-07-19",
+                  hours: 8,
+                  label: "FastAPI Mini-projet + révision Phase 2",
+                  details: "Mini-projet (6h) · révision Phase 2 (2h)",
+                },
+              ],
+            },
+          ],
+          milestone: {
+            num: 2,
+            date: "19 juillet",
+            label: "JALON 2",
+            skills: "POO N3 · FastAPI N2,5",
+          },
+        },
+        {
+          id: 3,
+          name: "Phase 3 — Fondations Cloud",
+          color: "#0ea5e9",
+          dateRange: "20 juillet → 23 août",
+          weeks: [
+            {
+              num: 8,
+              dates: "20–26 juillet",
+              topic: "AWS Identity",
+              sessions: [
+                {
+                  id: "s22",
+                  day: "Lun 20 juil.",
+                  date: "2026-07-20",
+                  hours: 4,
+                  label: "AWS Identity M1–M3",
+                  details:
+                    "M1 Concepts IAM · M2 Anatomie policy · M3 Access Keys",
+                },
+                {
+                  id: "s23",
+                  day: "Jeu 23 juil.",
+                  date: "2026-07-23",
+                  hours: 4,
+                  label: "AWS Identity M4–M6",
+                  details:
+                    "M4 Policies avancées · M5 Assume role STS · M6 Moindre privilège",
+                },
+                {
+                  id: "s24",
+                  day: "Dim 26 juil.",
+                  date: "2026-07-26",
+                  hours: 8,
+                  label: "AWS Identity M7–M11",
+                  details:
+                    "M7 Cognito · M8 Identity Center · M9 Secrets · M10 KMS · M11 mini-projet module",
+                },
+              ],
+            },
+            {
+              num: 9,
+              dates: "27 juil.–2 août",
+              topic: "Identity mini + Compute",
+              sessions: [
+                {
+                  id: "s25",
+                  day: "Lun 27 juil.",
+                  date: "2026-07-27",
+                  hours: 4,
+                  label: "AWS Identity Mini-projet",
+                  details: "Mini-projet complet (4h, version essentielle)",
+                },
+                {
+                  id: "s26",
+                  day: "Jeu 30 juil.",
+                  date: "2026-07-30",
+                  hours: 4,
+                  label: "AWS Compute M1–M3",
+                  details:
+                    "M1 EC2 bases · M2 Pricing & cycle de vie · M3 Métriques",
+                },
+                {
+                  id: "s27",
+                  day: "Dim 2 août",
+                  date: "2026-08-02",
+                  hours: 8,
+                  label: "AWS Compute M4–M8",
+                  details:
+                    "M4 Lambda bases · M5 Lambda triggers · M6 Limitations & Layers · M7 AppRunner · M8 début",
+                },
+              ],
+            },
+            {
+              num: 10,
+              dates: "3–9 août",
+              topic: "Compute fin + Networking",
+              sessions: [
+                {
+                  id: "s28",
+                  day: "Lun 3 août",
+                  date: "2026-08-03",
+                  hours: 4,
+                  label: "AWS Compute M8–M10",
+                  details: "M8 fin Batch · M9 Step Functions · M10 ECR",
+                },
+                {
+                  id: "s29",
+                  day: "Jeu 6 août",
+                  date: "2026-08-06",
+                  hours: 4,
+                  label: "AWS Compute M11–M12 + Mini-projet début",
+                  details:
+                    "M11 ECS bases · M12 ECS opération · Mini-projet début",
+                },
+                {
+                  id: "s30",
+                  day: "Dim 9 août",
+                  date: "2026-08-09",
+                  hours: 8,
+                  label: "Compute Mini-projet fin + Networking M1–M4",
+                  details:
+                    "Compute Mini-projet fin (3h) · Networking M1 Régions/IP · M2 VPC · M3 SG/ACL · M4 Subnets",
+                },
+              ],
+            },
+            {
+              num: 11,
+              dates: "10–16 août",
+              topic: "Networking fin + Database",
+              sessions: [
+                {
+                  id: "s31",
+                  day: "Lun 10 août",
+                  date: "2026-08-10",
+                  hours: 4,
+                  label: "AWS Networking M5–M7",
+                  details: "M5 Route53 · M6 CloudFront · M7 API Gateway",
+                },
+                {
+                  id: "s32",
+                  day: "Jeu 13 août",
+                  date: "2026-08-13",
+                  hours: 4,
+                  label: "Networking M8 + Mini-projet",
+                  details:
+                    "M8 Load Balancers · Mini-projet (4h, version essentielle)",
+                },
+                {
+                  id: "s33",
+                  day: "Dim 16 août",
+                  date: "2026-08-16",
+                  hours: 8,
+                  label: "AWS Database M1–M5",
+                  details:
+                    "M1 Tour d'horizon · M2 RDS provisionnement · M3 RDS backups · M4 DynamoDB bases · M5 début",
+                },
+              ],
+            },
+            {
+              num: 12,
+              dates: "17–23 août",
+              topic: "Database fin + buffer Phase 3",
+              sessions: [
+                {
+                  id: "s34",
+                  day: "Lun 17 août",
+                  date: "2026-08-17",
+                  hours: 4,
+                  label: "AWS Database M5–M7",
+                  details: "M5 fin · M6 S3 lifecycle · M7 EBS & EFS",
+                },
+                {
+                  id: "s35",
+                  day: "Jeu 20 août",
+                  date: "2026-08-20",
+                  hours: 4,
+                  label: "AWS Database M8 + Mini-projet",
+                  details: "M8 Calcul coûts · Mini-projet (4h)",
+                },
+                {
+                  id: "s36",
+                  day: "Dim 23 août",
+                  date: "2026-08-23",
+                  hours: 8,
+                  label: "Buffer Phase 3 — révision",
+                  details:
+                    "Révision modules faibles · 1-2 exercices pratiques CLI non faits",
+                },
+              ],
+            },
+          ],
+          milestone: {
+            num: 3,
+            date: "23 août",
+            label: "JALON 3",
+            skills:
+              "AWS Identity N2 · AWS Compute N2 · AWS Networking N2 · AWS Database & Storage N2",
+          },
+        },
+        {
+          id: 4,
+          name: "Phase 4 — Data & Analytics",
+          color: "#f59e0b",
+          dateRange: "24 août → 13 sept.",
+          weeks: [
+            {
+              num: 13,
+              dates: "24–30 août",
+              topic: "SQL",
+              sessions: [
+                {
+                  id: "s37",
+                  day: "Lun 24 août",
+                  date: "2026-08-24",
+                  hours: 4,
+                  label: "SQL M1–M4",
+                  details:
+                    "M1 Contexte · M2 CRUD · M3 DDL contraintes · M4 Agrégation",
+                },
+                {
+                  id: "s38",
+                  day: "Jeu 27 août",
+                  date: "2026-08-27",
+                  hours: 4,
+                  label: "SQL M5–M8",
+                  details:
+                    "M5 Jointures · M6 Lisibilité · M7 Transactions · M8 Vues",
+                },
+                {
+                  id: "s39",
+                  day: "Dim 30 août",
+                  date: "2026-08-30",
+                  hours: 8,
+                  label: "SQL M9–M12",
+                  details:
+                    "M9 Modélisation · M10 Manipulation avancée · M11 Sécurité · M12 N3 approfondissement",
+                },
+              ],
+            },
+            {
+              num: 14,
+              dates: "31 août–6 sept.",
+              topic: "SQL mini + AWS Analytics",
+              sessions: [
+                {
+                  id: "s40",
+                  day: "Lun 31 août",
+                  date: "2026-08-31",
+                  hours: 4,
+                  label: "SQL Mini-projet",
+                  details: "Schéma + migrations + requêtes clés (4h)",
+                },
+                {
+                  id: "s41",
+                  day: "Jeu 3 sept.",
+                  date: "2026-09-03",
+                  hours: 4,
+                  label: "AWS Analytics M1–M3",
+                  details:
+                    "M1 CloudWatch logs · M2 CloudWatch alerting · M3 Athena",
+                },
+                {
+                  id: "s42",
+                  day: "Dim 6 sept.",
+                  date: "2026-09-06",
+                  hours: 8,
+                  label: "AWS Analytics M4–M8",
+                  details:
+                    "M4 EMR · M5 Firehose · M6 Glue Catalog · M7 Glue tarification · M8 Comparatifs",
+                },
+              ],
+            },
+            {
+              num: 15,
+              dates: "7–13 sept.",
+              topic: "Analytics mini + Kinesis",
+              sessions: [
+                {
+                  id: "s43",
+                  day: "Lun 7 sept.",
+                  date: "2026-09-07",
+                  hours: 4,
+                  label: "AWS Analytics Mini-projet",
+                  details: "Pipeline S3→Glue→Athena + alerting (4h)",
+                },
+                {
+                  id: "s44",
+                  day: "Jeu 10 sept.",
+                  date: "2026-09-10",
+                  hours: 4,
+                  label: "AWS Kinesis M1–M3",
+                  details:
+                    "M1 Fondamentaux · M2 Comparaisons · M3 Mécanique stream",
+                },
+                {
+                  id: "s45",
+                  day: "Dim 13 sept.",
+                  date: "2026-09-13",
+                  hours: 8,
+                  label: "AWS Kinesis Mini-projet + bilan Phase 4",
+                  details:
+                    "Mini-projet (5h) · bilan Phase 4 + plan Phase 5 (3h)",
+                },
+              ],
+            },
+          ],
+          milestone: {
+            num: 4,
+            date: "13 septembre",
+            label: "JALON 4",
+            skills:
+              "SQL N2,5 · AWS Analytics N2 · AWS Kinesis N2 — Toutes compétences Confirmé débloquées",
+          },
+        },
+        {
+          id: 5,
+          name: "Phase 5 — Senior Push",
+          color: "#f97316",
+          dateRange: "14 sept. → 15 octobre",
+          weeks: [
+            {
+              num: 16,
+              dates: "14–20 sept.",
+              topic: "Senior P1",
+              sessions: [
+                {
+                  id: "s46",
+                  day: "Lun 14 sept.",
+                  date: "2026-09-14",
+                  hours: 4,
+                  label: "TU Senior — mutation testing",
+                  details: "Tests de mutation · property-based testing",
+                },
+                {
+                  id: "s47",
+                  day: "Jeu 17 sept.",
+                  date: "2026-09-17",
+                  hours: 4,
+                  label: "Python Senior — métaprogrammation",
+                  details: "Métaprogrammation avancée · property-based testing",
+                },
+                {
+                  id: "s48",
+                  day: "Dim 20 sept.",
+                  date: "2026-09-20",
+                  hours: 8,
+                  label: "AWS Compute Senior",
+                  details: "EKS intro · autoscaling avancé · Lambda @ Edge",
+                },
+              ],
+            },
+            {
+              num: 17,
+              dates: "21–27 sept.",
+              topic: "Senior P2",
+              sessions: [
+                {
+                  id: "s49",
+                  day: "Lun 21 sept.",
+                  date: "2026-09-21",
+                  hours: 4,
+                  label: "FastAPI Senior — WebSockets",
+                  details: "WebSockets · SQLAlchemy async complet",
+                },
+                {
+                  id: "s50",
+                  day: "Jeu 24 sept.",
+                  date: "2026-09-24",
+                  hours: 4,
+                  label: "POO Senior — design patterns avancés",
+                  details: "Top-down TDD · design patterns avancés",
+                },
+                {
+                  id: "s51",
+                  day: "Dim 27 sept.",
+                  date: "2026-09-27",
+                  hours: 8,
+                  label: "AWS Analytics Senior — Redshift",
+                  details: "Redshift serverless · OpenSearch",
+                },
+              ],
+            },
+            {
+              num: 18,
+              dates: "28 sept.–4 oct.",
+              topic: "Mini-projets approfondis",
+              sessions: [
+                {
+                  id: "s52",
+                  day: "Lun 28 sept.",
+                  date: "2026-09-28",
+                  hours: 4,
+                  label: "Mini-projet approfondi — AWS Compute",
+                  details: "Version complète avec déploiement réel",
+                },
+                {
+                  id: "s53",
+                  day: "Jeu 1 oct.",
+                  date: "2026-10-01",
+                  hours: 4,
+                  label: "Mini-projet approfondi — Networking",
+                  details: "VPC Peering · Transit Gateway",
+                },
+                {
+                  id: "s54",
+                  day: "Dim 4 oct.",
+                  date: "2026-10-04",
+                  hours: 8,
+                  label: "Double session — mini-projets portfolio",
+                  details: "2-3 mini-projets les plus importants du portfolio",
+                },
+              ],
+            },
+            {
+              num: 19,
+              dates: "5–11 oct.",
+              topic: "Révision croisée",
+              sessions: [
+                {
+                  id: "s55",
+                  day: "Lun 5 oct.",
+                  date: "2026-10-05",
+                  hours: 4,
+                  label: "POO Senior + revue mini-projets",
+                  details: "Revue des 3 mini-projets les plus faibles",
+                },
+                {
+                  id: "s56",
+                  day: "Jeu 8 oct.",
+                  date: "2026-10-08",
+                  hours: 4,
+                  label: "Zones faibles — révision ciblée",
+                  details: "Révision modulaire des points faibles identifiés",
+                },
+                {
+                  id: "s57",
+                  day: "Dim 11 oct.",
+                  date: "2026-10-11",
+                  hours: 8,
+                  label: "Révision croisée + auto-évaluation",
+                  details: "Cross-révision · préparation bilan final",
+                },
+              ],
+            },
+            {
+              num: 20,
+              dates: "12–15 oct.",
+              topic: "Sprint final",
+              sessions: [
+                {
+                  id: "s58",
+                  day: "Lun 12 oct.",
+                  date: "2026-10-12",
+                  hours: 4,
+                  label: "Sprint final — synthèse",
+                  details: "Synthèse globale des compétences",
+                },
+                {
+                  id: "s59",
+                  day: "Jeu 15 oct.",
+                  date: "2026-10-15",
+                  hours: 4,
+                  label: "Sprint final — bilan · JALON 5",
+                  details:
+                    "Bilan final · auto-évaluation complète · Confirmé ✅",
+                },
+              ],
+            },
+          ],
+          milestone: {
+            num: 5,
+            date: "15 octobre",
+            label: "JALON 5",
+            skills:
+              "Toutes compétences Confirmé ✅ · Senior partiel selon buffer",
+          },
+        },
+      ];
 
-const TOTAL_HOURS = 312;
+      const TOTAL_HOURS = 312;
 
-const LS_KEY = 'noledj_v1';
+      const LS_KEY = "noledj_v1";
 
-function load() {
-  try { return JSON.parse(localStorage.getItem(LS_KEY) || '{}'); } catch { return {}; }
-}
-function save(state) {
-  localStorage.setItem(LS_KEY, JSON.stringify(state));
-}
+      function load() {
+        try {
+          return JSON.parse(localStorage.getItem(LS_KEY) || "{}");
+        } catch {
+          return {};
+        }
+      }
+      function save(state) {
+        localStorage.setItem(LS_KEY, JSON.stringify(state));
+      }
 
-function allSessions(phase) {
-  return phase.weeks.flatMap(w => w.sessions);
-}
+      // Autoscroll-on-load preference — its own key so "Réinitialiser" doesn't clear it. Default on.
+      const AUTOSCROLL_KEY = "noledj_autoscroll";
+      function autoscrollOn() {
+        return localStorage.getItem(AUTOSCROLL_KEY) !== "0";
+      }
+      function setAutoscroll(on) {
+        localStorage.setItem(AUTOSCROLL_KEY, on ? "1" : "0");
+      }
 
-function actualKey(sid) { return 'h_' + sid; }
-function getActual(state, sid) {
-  const v = state[actualKey(sid)];
-  return (typeof v === 'number' && isFinite(v) && v >= 0) ? v : null;
-}
+      function allSessions(phase) {
+        return phase.weeks.flatMap((w) => w.sessions);
+      }
 
-function getStats(state) {
-  let hours = 0, actual = 0, actualEntered = 0, sessions = 0, total = 0;
-  for (const phase of PHASES) {
-    for (const s of allSessions(phase)) {
-      total++;
-      if (state[s.id]) { hours += s.hours; sessions++; }
-      const a = getActual(state, s.id);
-      if (a !== null) { actual += a; actualEntered++; }
-    }
-  }
-  return { hours, actual, actualEntered, sessions, total };
-}
+      function actualKey(sid) {
+        return "h_" + sid;
+      }
+      function getActual(state, sid) {
+        const v = state[actualKey(sid)];
+        return typeof v === "number" && isFinite(v) && v >= 0 ? v : null;
+      }
 
-function isPhaseComplete(phase, state) {
-  return allSessions(phase).every(s => state[s.id]);
-}
+      function getStats(state) {
+        let hours = 0,
+          actual = 0,
+          actualEntered = 0,
+          sessions = 0,
+          total = 0;
+        for (const phase of PHASES) {
+          for (const s of allSessions(phase)) {
+            total++;
+            if (state[s.id]) {
+              hours += s.hours;
+              sessions++;
+            }
+            const a = getActual(state, s.id);
+            if (a !== null) {
+              actual += a;
+              actualEntered++;
+            }
+          }
+        }
+        return { hours, actual, actualEntered, sessions, total };
+      }
 
-function getCurrentWeek() {
-  const now = new Date();
-  const start = new Date('2026-06-01');
-  const days = Math.max(0, Math.floor((now - start) / 86400000));
-  return Math.min(20, Math.floor(days / 7) + 1);
-}
+      function isPhaseComplete(phase, state) {
+        return allSessions(phase).every((s) => state[s.id]);
+      }
 
-function getExpectedHours() {
-  const now = new Date();
-  const start = new Date('2026-06-01');
-  const days = Math.max(0, Math.floor((now - start) / 86400000));
-  const completedWeeks = Math.floor(days / 7);
-  return Math.min(completedWeeks * 16, TOTAL_HOURS);
-}
+      function getCurrentWeek() {
+        const now = new Date();
+        const start = new Date("2026-06-01");
+        const days = Math.max(0, Math.floor((now - start) / 86400000));
+        return Math.min(20, Math.floor(days / 7) + 1);
+      }
 
-function isToday(isoDate) {
-  return isoDate === new Date().toISOString().slice(0, 10);
-}
+      function getExpectedHours() {
+        const now = new Date();
+        const start = new Date("2026-06-01");
+        const days = Math.max(0, Math.floor((now - start) / 86400000));
+        const completedWeeks = Math.floor(days / 7);
+        return Math.min(completedWeeks * 16, TOTAL_HOURS);
+      }
 
-function confetti() {
-  const wrap = document.getElementById('confetti-wrap');
-  const colors = ['#8b5cf6','#6366f1','#0ea5e9','#f59e0b','#10b981','#fbbf24','#f97316'];
-  for (let i = 0; i < 70; i++) {
-    const el = document.createElement('div');
-    el.className = 'cp';
-    const size = 4 + Math.random() * 8;
-    el.style.cssText = `
-      left:${Math.random()*100}%;top:-12px;
+      function isToday(isoDate) {
+        return isoDate === new Date().toISOString().slice(0, 10);
+      }
+
+      function confetti() {
+        const wrap = document.getElementById("confetti-wrap");
+        const colors = [
+          "#8b5cf6",
+          "#6366f1",
+          "#0ea5e9",
+          "#f59e0b",
+          "#10b981",
+          "#fbbf24",
+          "#f97316",
+        ];
+        for (let i = 0; i < 70; i++) {
+          const el = document.createElement("div");
+          el.className = "cp";
+          const size = 4 + Math.random() * 8;
+          el.style.cssText = `
+      left:${Math.random() * 100}%;top:-12px;
       width:${size}px;height:${size}px;
-      background:${colors[Math.floor(Math.random()*colors.length)]};
-      animation-delay:${Math.random()*0.6}s;
-      animation-duration:${1.4+Math.random()*1.6}s;
+      background:${colors[Math.floor(Math.random() * colors.length)]};
+      animation-delay:${Math.random() * 0.6}s;
+      animation-duration:${1.4 + Math.random() * 1.6}s;
     `;
-    wrap.appendChild(el);
-    setTimeout(() => el.remove(), 3200);
-  }
-}
+          wrap.appendChild(el);
+          setTimeout(() => el.remove(), 3200);
+        }
+      }
 
-function render() {
-  const state = load();
-  const stats = getStats(state);
-  const pct = Math.round((stats.hours / TOTAL_HOURS) * 100);
-  const curWeek = getCurrentWeek();
-  const expected = getExpectedHours();
-  const delta = stats.hours - expected;
+      function render() {
+        const state = load();
+        const stats = getStats(state);
+        const pct = Math.round((stats.hours / TOTAL_HOURS) * 100);
+        const curWeek = getCurrentWeek();
+        const expected = getExpectedHours();
+        const delta = stats.hours - expected;
 
-  let deltaCls, deltaMsg;
-  if (delta >= 0)       { deltaCls = 'ok';   deltaMsg = `+${delta}h d'avance`; }
-  else if (delta >= -10){ deltaCls = 'warn';  deltaMsg = `${Math.abs(delta)}h de retard — rattrapable`; }
-  else                  { deltaCls = 'bad';   deltaMsg = `${Math.abs(delta)}h de retard — compresser les mini-projets`; }
+        let deltaCls, deltaMsg;
+        if (delta >= 0) {
+          deltaCls = "ok";
+          deltaMsg = `+${delta} h d'avance`;
+        } else if (delta >= -10) {
+          deltaCls = "warn";
+          deltaMsg = `${Math.abs(delta)} h de retard — rattrapable`;
+        } else {
+          deltaCls = "bad";
+          deltaMsg = `${Math.abs(delta)} h de retard — compresser les mini-projets`;
+        }
 
-  document.getElementById('app').innerHTML = `
+        document.getElementById("app").innerHTML =
+          `
     <div class="header">
       <h1>Noledj — Tableau de bord</h1>
       <p>1ᵉʳ juin → 15 octobre 2026 &nbsp;·&nbsp; 20 semaines · 5 phases · 5 jalons</p>
-      <div class="global-bar-wrap"><div class="global-bar" style=\"width:`+pct+`%\"></div></div>
-      <div class="global-pct">${pct}% &nbsp;·&nbsp; ${stats.hours}h / ${TOTAL_HOURS}h</div>
+      <div class="global-bar-wrap"><div class="global-bar" style=\"width:` +
+          pct +
+          `%\"></div></div>
+      <div class="global-pct">${pct} % &nbsp;·&nbsp; ${stats.hours} h / ${TOTAL_HOURS} h</div>
+      <label class="autoscroll-toggle">
+        <input type="checkbox" id="autoscroll-cb" ${autoscrollOn() ? "checked" : ""}>
+        Défiler jusqu'à la prochaine leçon à l'ouverture
+      </label>
     </div>
 
     <div class="stats">
       <div class="stat">
-        <div class="stat-value">${stats.hours}<span style="font-size:.85rem;color:var(--muted)">h</span></div>
+        <div class="stat-value">${stats.hours}<span style="font-size:.85rem;color:var(--muted)"> h</span></div>
         <div class="stat-label">Heures planifiées</div>
-        ${stats.actualEntered > 0 ? `<div class="stat-sub">réel <b>${formatHours(stats.actual)}h</b> · ${stats.actualEntered}/${stats.total}</div>` : ''}
+        ${stats.actualEntered > 0 ? `<div class="stat-sub">réel <b>${formatHours(stats.actual)} h</b> · ${stats.actualEntered}/${stats.total}</div>` : ""}
       </div>
       <div class="stat">
-        <div class="stat-value">${stats.sessions}<span style="font-size:.85rem;color:var(--muted)">/${stats.total}</span></div>
+        <div class="stat-value">${stats.sessions}<span style="font-size:.85rem;color:var(--muted)"> / ${stats.total}</span></div>
         <div class="stat-label">Sessions</div>
       </div>
       <div class="stat">
-        <div class="stat-value">${pct}<span style="font-size:.85rem;color:var(--muted)">%</span></div>
+        <div class="stat-value">${pct}<span style="font-size:.85rem;color:var(--muted)"> %</span></div>
         <div class="stat-label">Progression</div>
       </div>
       <div class="stat">
-        <div class="stat-value">${curWeek}<span style="font-size:.85rem;color:var(--muted)">/20</span></div>
+        <div class="stat-value">${curWeek}<span style="font-size:.85rem;color:var(--muted)"> / 20</span></div>
         <div class="stat-label">Semaine</div>
       </div>
     </div>
@@ -1070,7 +2266,7 @@ function render() {
     <div class="indicator">
       <div>
         <div class="indicator-label">Indicateur sem. ${curWeek}</div>
-        <div class="indicator-val ${deltaCls}">${stats.hours}h <span style="font-size:.75rem;color:var(--muted);font-weight:400">/ ${expected}h attendues</span></div>
+        <div class="indicator-val ${deltaCls}">${stats.hours} h <span style="font-size:.75rem;color:var(--muted);font-weight:400">/ ${expected} h attendues</span></div>
       </div>
       <div class="indicator-msg ${deltaCls}">${deltaMsg}</div>
     </div>
@@ -1078,21 +2274,25 @@ function render() {
     <div class="milestones-section">
       <div class="section-title">Jalons</div>
       <div class="milestones-row">
-        ${PHASES.map(p => {
+        ${PHASES.map((p) => {
           const done = isPhaseComplete(p, state);
-          return `<div class="milestone ${done?'done':''}">
-            <div class="m-dot">${done ? '✓' : p.milestone.num}</div>
+          return `<div class="milestone ${done ? "done" : ""}">
+            <div class="m-dot">${done ? "✓" : p.milestone.num}</div>
             <div class="m-label">${p.milestone.label}</div>
             <div class="m-date">${p.milestone.date}</div>
           </div>`;
-        }).join('')}
+        }).join("")}
       </div>
     </div>
 
     <div class="phases">
       ${(() => {
-        const firstIncomplete = PHASES.findIndex(p => !isPhaseComplete(p, state));
-        return PHASES.map((p, i) => renderPhase(p, state, i, firstIncomplete)).join('');
+        const firstIncomplete = PHASES.findIndex(
+          (p) => !isPhaseComplete(p, state),
+        );
+        return PHASES.map((p, i) =>
+          renderPhase(p, state, i, firstIncomplete),
+        ).join("");
       })()}
     </div>
 
@@ -1102,136 +2302,169 @@ function render() {
     </div>
   `;
 
-  // wire checkboxes
-  document.querySelectorAll('input[data-sid]').forEach(cb => {
-    cb.addEventListener('change', e => {
-      const s = load();
-      const prevComplete = PHASES.map(p => isPhaseComplete(p, s));
-      s[e.target.dataset.sid] = e.target.checked;
-      save(s);
-      const newComplete = PHASES.map(p => isPhaseComplete(p, s));
-      if (newComplete.some((c, i) => c && !prevComplete[i])) confetti();
-      render();
-    });
-  });
+        // wire checkboxes
+        document.querySelectorAll("input[data-sid]").forEach((cb) => {
+          cb.addEventListener("change", (e) => {
+            const s = load();
+            const prevComplete = PHASES.map((p) => isPhaseComplete(p, s));
+            s[e.target.dataset.sid] = e.target.checked;
+            save(s);
+            const newComplete = PHASES.map((p) => isPhaseComplete(p, s));
+            if (newComplete.some((c, i) => c && !prevComplete[i])) confetti();
+            render();
+          });
+        });
 
-  // wire actual-hours inputs
-  document.querySelectorAll('input[data-hid]').forEach(inp => {
-    inp.addEventListener('change', e => {
-      const s = load();
-      const raw = e.target.value.trim().replace(',', '.');
-      const k = actualKey(e.target.dataset.hid);
-      if (raw === '') {
-        delete s[k];
-      } else {
-        const n = parseFloat(raw);
-        if (!isFinite(n) || n < 0) { delete s[k]; }
-        else { s[k] = Math.round(n * 100) / 100; }
+        // wire actual-hours inputs
+        document.querySelectorAll("input[data-hid]").forEach((inp) => {
+          inp.addEventListener("change", (e) => {
+            const s = load();
+            const raw = e.target.value.trim().replace(",", ".");
+            const k = actualKey(e.target.dataset.hid);
+            if (raw === "") {
+              delete s[k];
+            } else {
+              const n = parseFloat(raw);
+              if (!isFinite(n) || n < 0) {
+                delete s[k];
+              } else {
+                s[k] = Math.round(n * 100) / 100;
+              }
+            }
+            save(s);
+            render();
+          });
+          inp.addEventListener("click", (e) => e.stopPropagation());
+        });
+
+        // wire phase toggles
+        document.querySelectorAll(".phase-header").forEach((h) => {
+          h.addEventListener("click", () =>
+            h.closest(".phase").classList.toggle("open"),
+          );
+        });
+
+        // wire autoscroll preference toggle
+        const asCb = document.getElementById("autoscroll-cb");
+        if (asCb)
+          asCb.addEventListener("change", (e) =>
+            setAutoscroll(e.target.checked),
+          );
+
+        // wire course-open anchors
+        document.querySelectorAll("a[data-open-sid]").forEach((a) => {
+          a.addEventListener("click", (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            openCourse(a.dataset.openSid);
+          });
+        });
       }
-      save(s);
-      render();
-    });
-    inp.addEventListener('click', e => e.stopPropagation());
-  });
 
-  // wire phase toggles
-  document.querySelectorAll('.phase-header').forEach(h => {
-    h.addEventListener('click', () => h.closest('.phase').classList.toggle('open'));
-  });
+      function renderPhase(phase, state, idx, firstIncompleteIdx) {
+        const sessions = allSessions(phase);
+        const done = sessions.filter((s) => state[s.id]).length;
+        const total = sessions.length;
+        const hoursD = sessions
+          .filter((s) => state[s.id])
+          .reduce((a, s) => a + s.hours, 0);
+        const hoursT = sessions.reduce((a, s) => a + s.hours, 0);
+        let actualSum = 0,
+          actualCount = 0;
+        for (const s of sessions) {
+          const a = getActual(state, s.id);
+          if (a !== null) {
+            actualSum += a;
+            actualCount++;
+          }
+        }
+        const actualSuffix =
+          actualCount > 0
+            ? ` &nbsp;·&nbsp; réel ${formatHours(actualSum)} h`
+            : "";
+        const pct = total ? Math.round((done / total) * 100) : 0;
+        const isOpen = idx === firstIncompleteIdx;
 
-  // wire course-open anchors
-  document.querySelectorAll('a[data-open-sid]').forEach(a => {
-    a.addEventListener('click', e => {
-      e.preventDefault();
-      e.stopPropagation();
-      openCourse(a.dataset.openSid);
-    });
-  });
-}
-
-function renderPhase(phase, state, idx, firstIncompleteIdx) {
-  const sessions = allSessions(phase);
-  const done = sessions.filter(s => state[s.id]).length;
-  const total = sessions.length;
-  const hoursD = sessions.filter(s => state[s.id]).reduce((a, s) => a + s.hours, 0);
-  const hoursT = sessions.reduce((a, s) => a + s.hours, 0);
-  let actualSum = 0, actualCount = 0;
-  for (const s of sessions) {
-    const a = getActual(state, s.id);
-    if (a !== null) { actualSum += a; actualCount++; }
-  }
-  const actualSuffix = actualCount > 0 ? ` &nbsp;·&nbsp; réel ${formatHours(actualSum)}h` : '';
-  const pct = total ? Math.round(done / total * 100) : 0;
-  const isOpen = idx === firstIncompleteIdx;
-
-  return `
-    <div class="phase ${isOpen ? 'open' : ''}">
+        return (
+          `
+    <div class="phase ${isOpen ? "open" : ""}">
       <div class="phase-header">
-        <div class="phase-accent" style=\"background:`+phase.color+`\"></div>
+        <div class="phase-accent" style=\"background:` +
+          phase.color +
+          `\"></div>
         <div class="phase-info">
           <div class="phase-name">${phase.name}</div>
-          <div class="phase-meta">${phase.dateRange} &nbsp;·&nbsp; ${done}/${total} sessions &nbsp;·&nbsp; ${hoursD}h/${hoursT}h${actualSuffix}</div>
+          <div class="phase-meta">${phase.dateRange} &nbsp;·&nbsp; ${done}/${total} sessions &nbsp;·&nbsp; ${hoursD} h / ${hoursT} h${actualSuffix}</div>
         </div>
         <div class="phase-prog-wrap">
-          <div class="phase-bar"><div class="phase-bar-fill" style=\"width:`+`${pct}%;background:${phase.color}`+`\"></div></div>
-          <div class="phase-pct">${pct}%</div>
+          <div class="phase-bar"><div class="phase-bar-fill" style=\"width:` +
+          `${pct}%;background:${phase.color}` +
+          `\"></div></div>
+          <div class="phase-pct">${pct} %</div>
         </div>
         <div class="phase-chevron">▼</div>
       </div>
       <div class="phase-body">
-        ${phase.weeks.map(w => renderWeek(w, state, phase.color)).join('')}
+        ${phase.weeks.map((w) => renderWeek(w, state, phase.color)).join("")}
         ${renderMilestoneCard(phase, state)}
       </div>
     </div>
-  `;
-}
+  `
+        );
+      }
 
-function renderWeek(week, state, color) {
-  return `
+      function renderWeek(week, state, color) {
+        return (
+          `
     <div class="week">
       <div class="week-header">
         <span class="week-num">Sem. ${week.num}</span>
-        <span class="week-topic" style=\"color:`+color+`\">${week.topic}</span>
+        <span class="week-topic" style=\"color:` +
+          color +
+          `\">${week.topic}</span>
         <span class="week-dates">${week.dates}</span>
       </div>
-      ${week.sessions.map(s => renderSession(s, state)).join('')}
+      ${week.sessions.map((s) => renderSession(s, state)).join("")}
     </div>
-  `;
-}
+  `
+        );
+      }
 
-function formatHours(h) {
-  return Number.isInteger(h) ? String(h) : h.toFixed(2).replace(/\.?0+$/, '');
-}
+      function formatHours(h) {
+        return Number.isInteger(h)
+          ? String(h)
+          : h.toFixed(2).replace(/\.?0+$/, "");
+      }
 
-function hasCourse(sid) {
-  const mods = COURSES[sid];
-  return Array.isArray(mods) && mods.length > 0;
-}
+      function hasCourse(sid) {
+        const mods = COURSES[sid];
+        return Array.isArray(mods) && mods.length > 0;
+      }
 
-function renderSession(s, state) {
-  const checked = !!state[s.id];
-  const today = isToday(s.date);
-  const actual = getActual(state, s.id);
-  let actualCls = '';
-  if (actual !== null) {
-    if (actual > s.hours) actualCls = ' over';
-    else if (actual < s.hours) actualCls = ' under';
-  }
-  const openBtn = hasCourse(s.id)
-    ? `<a href="#" class="s-open" data-open-sid="${s.id}" title="Ouvrir le cours" aria-label="Ouvrir le cours">📖</a>`
-    : '';
-  return `
-    <div class="session${checked?' done':''}${today?' today':''}">
-      <input type="checkbox" data-sid="${s.id}" ${checked?'checked':''}>
+      function renderSession(s, state) {
+        const checked = !!state[s.id];
+        const today = isToday(s.date);
+        const actual = getActual(state, s.id);
+        let actualCls = "";
+        if (actual !== null) {
+          if (actual > s.hours) actualCls = " over";
+          else if (actual < s.hours) actualCls = " under";
+        }
+        const openBtn = hasCourse(s.id)
+          ? `<a href="#" class="s-open" data-open-sid="${s.id}" title="Ouvrir le cours" aria-label="Ouvrir le cours">📖</a>`
+          : "";
+        return `
+    <div class="session${checked ? " done" : ""}${today ? " today" : ""}" id="sess-${s.id}">
+      <input type="checkbox" data-sid="${s.id}" ${checked ? "checked" : ""}>
       <div class="s-body">
         <div class="s-row1">
           <span class="s-day">${s.day}</span>
-          ${today ? '<span class="s-today-badge">AUJOURD\'HUI</span>' : ''}
-          <span class="s-hours">prévu ${s.hours}h</span>
+          ${today ? '<span class="s-today-badge">AUJOURD\'HUI</span>' : ""}
+          <span class="s-hours">prévu ${s.hours} h</span>
           <span class="s-actual-label">réel</span>
           <input type="number" class="s-actual${actualCls}" data-hid="${s.id}"
                  min="0" step="0.25" placeholder="${s.hours}"
-                 value="${actual !== null ? formatHours(actual) : ''}"
+                 value="${actual !== null ? formatHours(actual) : ""}"
                  title="Heures réellement passées sur cette session">
         </div>
         <div class="s-label-row">${openBtn}<span class="s-label">${s.label}</span></div>
@@ -1239,256 +2472,362 @@ function renderSession(s, state) {
       </div>
     </div>
   `;
-}
-
-// ── Markdown renderer (minimal, sufficient for course files) ────────────────
-function mdEscape(s) {
-  return s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-}
-function mdInline(s) {
-  s = mdEscape(s);
-  // code spans first (protect from other replacements)
-  const codes = [];
-  s = s.replace(/`([^`]+)`/g, (_, c) => { codes.push(c); return `\x00${codes.length-1}\x00`; });
-  s = s.replace(/\*\*([^*\n]+)\*\*/g, '<strong>$1</strong>');
-  s = s.replace(/(^|[^*])\*([^*\n]+)\*(?!\*)/g, '$1<em>$2</em>');
-  // Underscore emphasis: only at word boundaries so snake_case is preserved.
-  s = s.replace(/(^|[^\w])__([^_\n]+)__(?!\w)/g, '$1<strong>$2</strong>');
-  s = s.replace(/(^|[^\w])_([^_\n]+)_(?!\w)/g, '$1<em>$2</em>');
-  s = s.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>');
-  s = s.replace(/\x00(\d+)\x00/g, (_, i) => `<code>${codes[+i]}</code>`);
-  return s;
-}
-function renderMarkdown(md) {
-  const lines = md.replace(/\r\n?/g, '\n').split('\n');
-  const out = [];
-  let para = [];
-  let listStack = []; // [{type, indent}]
-  let inCode = false, codeLang = '', codeBuf = [];
-  let inTable = false, tableHead = null;
-
-  const flushPara = () => {
-    if (para.length) { out.push(`<p>${mdInline(para.join(' '))}</p>`); para = []; }
-  };
-  const closeLists = (toIndent = -1) => {
-    while (listStack.length && listStack[listStack.length-1].indent > toIndent) {
-      out.push(listStack.pop().type === 'ul' ? '</ul>' : '</ol>');
-    }
-  };
-  const closeAllLists = () => closeLists(-1);
-  const flushTable = () => {
-    if (inTable) { out.push('</tbody></table>'); inTable = false; tableHead = null; }
-  };
-
-  for (let i = 0; i < lines.length; i++) {
-    const line = lines[i];
-
-    // fenced code block
-    const fence = line.match(/^```\s*(\S*)\s*$/);
-    if (fence) {
-      if (!inCode) {
-        flushPara(); closeAllLists(); flushTable();
-        inCode = true; codeLang = fence[1] || ''; codeBuf = [];
-      } else {
-        out.push(`<pre><code${codeLang ? ` class="lang-${codeLang}"` : ''}>${mdEscape(codeBuf.join('\n'))}</code></pre>`);
-        inCode = false; codeBuf = [];
       }
-      continue;
-    }
-    if (inCode) { codeBuf.push(line); continue; }
 
-    // blank line
-    if (/^\s*$/.test(line)) {
-      flushPara(); flushTable();
-      continue;
-    }
-
-    // heading
-    const h = line.match(/^(#{1,6})\s+(.*?)\s*#*\s*$/);
-    if (h) {
-      flushPara(); closeAllLists(); flushTable();
-      out.push(`<h${h[1].length}>${mdInline(h[2])}</h${h[1].length}>`);
-      continue;
-    }
-
-    // horizontal rule
-    if (/^\s*([-*_])\s*\1\s*\1[\s\-*_]*$/.test(line) && !inTable) {
-      flushPara(); closeAllLists();
-      out.push('<hr>');
-      continue;
-    }
-
-    // table
-    if (/^\s*\|.*\|\s*$/.test(line)) {
-      const cells = line.trim().slice(1, -1).split('|').map(c => c.trim());
-      const next = lines[i+1] || '';
-      if (!inTable && /^\s*\|?\s*:?-+:?\s*(\|\s*:?-+:?\s*)+\|?\s*$/.test(next)) {
-        flushPara(); closeAllLists();
-        out.push('<table><thead><tr>' + cells.map(c => `<th>${mdInline(c)}</th>`).join('') + '</tr></thead><tbody>');
-        inTable = true; tableHead = cells.length;
-        i++; // skip separator
-        continue;
+      // ── Markdown renderer (minimal, sufficient for course files) ────────────────
+      function mdEscape(s) {
+        return s.replace(
+          /[&<>"']/g,
+          (c) =>
+            ({
+              "&": "&amp;",
+              "<": "&lt;",
+              ">": "&gt;",
+              '"': "&quot;",
+              "'": "&#39;",
+            })[c],
+        );
       }
-      if (inTable) {
-        out.push('<tr>' + cells.map(c => `<td>${mdInline(c)}</td>`).join('') + '</tr>');
-        continue;
+      function mdInline(s) {
+        s = mdEscape(s);
+        // code spans first (protect from other replacements)
+        const codes = [];
+        s = s.replace(/`([^`]+)`/g, (_, c) => {
+          codes.push(c);
+          return `\x00${codes.length - 1}\x00`;
+        });
+        s = s.replace(/\*\*([^*\n]+)\*\*/g, "<strong>$1</strong>");
+        s = s.replace(/(^|[^*])\*([^*\n]+)\*(?!\*)/g, "$1<em>$2</em>");
+        // Underscore emphasis: only at word boundaries so snake_case is preserved.
+        s = s.replace(/(^|[^\w])__([^_\n]+)__(?!\w)/g, "$1<strong>$2</strong>");
+        s = s.replace(/(^|[^\w])_([^_\n]+)_(?!\w)/g, "$1<em>$2</em>");
+        s = s.replace(
+          /\[([^\]]+)\]\(([^)]+)\)/g,
+          '<a href="$2" target="_blank" rel="noopener">$1</a>',
+        );
+        s = s.replace(/\x00(\d+)\x00/g, (_, i) => `<code>${codes[+i]}</code>`);
+        return s;
       }
-    } else {
-      flushTable();
-    }
+      function renderMarkdown(md) {
+        const lines = md.replace(/\r\n?/g, "\n").split("\n");
+        const out = [];
+        let para = [];
+        let listStack = []; // [{type, indent}]
+        let inCode = false,
+          codeLang = "",
+          codeBuf = [];
+        let inTable = false,
+          tableHead = null;
 
-    // list item
-    const liU = line.match(/^(\s*)[-*+]\s+(.*)$/);
-    const liO = line.match(/^(\s*)\d+\.\s+(.*)$/);
-    if (liU || liO) {
-      flushPara();
-      const m = liU || liO;
-      const indent = m[1].length;
-      const type = liU ? 'ul' : 'ol';
-      closeLists(indent);
-      const top = listStack[listStack.length-1];
-      if (!top || top.indent < indent) {
-        out.push(type === 'ul' ? '<ul>' : '<ol>');
-        listStack.push({ type, indent });
-      } else if (top.type !== type) {
-        out.push(top.type === 'ul' ? '</ul>' : '</ol>');
-        listStack.pop();
-        out.push(type === 'ul' ? '<ul>' : '<ol>');
-        listStack.push({ type, indent });
+        const flushPara = () => {
+          if (para.length) {
+            out.push(`<p>${mdInline(para.join(" "))}</p>`);
+            para = [];
+          }
+        };
+        const closeLists = (toIndent = -1) => {
+          while (
+            listStack.length &&
+            listStack[listStack.length - 1].indent > toIndent
+          ) {
+            out.push(listStack.pop().type === "ul" ? "</ul>" : "</ol>");
+          }
+        };
+        const closeAllLists = () => closeLists(-1);
+        const flushTable = () => {
+          if (inTable) {
+            out.push("</tbody></table>");
+            inTable = false;
+            tableHead = null;
+          }
+        };
+
+        for (let i = 0; i < lines.length; i++) {
+          const line = lines[i];
+
+          // fenced code block
+          const fence = line.match(/^```\s*(\S*)\s*$/);
+          if (fence) {
+            if (!inCode) {
+              flushPara();
+              closeAllLists();
+              flushTable();
+              inCode = true;
+              codeLang = fence[1] || "";
+              codeBuf = [];
+            } else {
+              out.push(
+                `<pre><code${codeLang ? ` class="lang-${codeLang}"` : ""}>${mdEscape(codeBuf.join("\n"))}</code></pre>`,
+              );
+              inCode = false;
+              codeBuf = [];
+            }
+            continue;
+          }
+          if (inCode) {
+            codeBuf.push(line);
+            continue;
+          }
+
+          // blank line
+          if (/^\s*$/.test(line)) {
+            flushPara();
+            flushTable();
+            continue;
+          }
+
+          // heading
+          const h = line.match(/^(#{1,6})\s+(.*?)\s*#*\s*$/);
+          if (h) {
+            flushPara();
+            closeAllLists();
+            flushTable();
+            out.push(`<h${h[1].length}>${mdInline(h[2])}</h${h[1].length}>`);
+            continue;
+          }
+
+          // horizontal rule
+          if (/^\s*([-*_])\s*\1\s*\1[\s\-*_]*$/.test(line) && !inTable) {
+            flushPara();
+            closeAllLists();
+            out.push("<hr>");
+            continue;
+          }
+
+          // table
+          if (/^\s*\|.*\|\s*$/.test(line)) {
+            const cells = line
+              .trim()
+              .slice(1, -1)
+              .split("|")
+              .map((c) => c.trim());
+            const next = lines[i + 1] || "";
+            if (
+              !inTable &&
+              /^\s*\|?\s*:?-+:?\s*(\|\s*:?-+:?\s*)+\|?\s*$/.test(next)
+            ) {
+              flushPara();
+              closeAllLists();
+              out.push(
+                "<table><thead><tr>" +
+                  cells.map((c) => `<th>${mdInline(c)}</th>`).join("") +
+                  "</tr></thead><tbody>",
+              );
+              inTable = true;
+              tableHead = cells.length;
+              i++; // skip separator
+              continue;
+            }
+            if (inTable) {
+              out.push(
+                "<tr>" +
+                  cells.map((c) => `<td>${mdInline(c)}</td>`).join("") +
+                  "</tr>",
+              );
+              continue;
+            }
+          } else {
+            flushTable();
+          }
+
+          // list item
+          const liU = line.match(/^(\s*)[-*+]\s+(.*)$/);
+          const liO = line.match(/^(\s*)\d+\.\s+(.*)$/);
+          if (liU || liO) {
+            flushPara();
+            const m = liU || liO;
+            const indent = m[1].length;
+            const type = liU ? "ul" : "ol";
+            closeLists(indent);
+            const top = listStack[listStack.length - 1];
+            if (!top || top.indent < indent) {
+              out.push(type === "ul" ? "<ul>" : "<ol>");
+              listStack.push({ type, indent });
+            } else if (top.type !== type) {
+              out.push(top.type === "ul" ? "</ul>" : "</ol>");
+              listStack.pop();
+              out.push(type === "ul" ? "<ul>" : "<ol>");
+              listStack.push({ type, indent });
+            }
+            out.push(`<li>${mdInline(m[2])}</li>`);
+            continue;
+          }
+
+          // blockquote
+          const bq = line.match(/^>\s?(.*)$/);
+          if (bq) {
+            flushPara();
+            closeAllLists();
+            out.push(`<blockquote>${mdInline(bq[1])}</blockquote>`);
+            continue;
+          }
+
+          // paragraph (close lists if continuing at root indent)
+          closeAllLists();
+          para.push(line.trim());
+        }
+
+        flushPara();
+        closeAllLists();
+        flushTable();
+        if (inCode)
+          out.push(`<pre><code>${mdEscape(codeBuf.join("\n"))}</code></pre>`);
+        return out.join("\n");
       }
-      out.push(`<li>${mdInline(m[2])}</li>`);
-      continue;
-    }
 
-    // blockquote
-    const bq = line.match(/^>\s?(.*)$/);
-    if (bq) {
-      flushPara(); closeAllLists();
-      out.push(`<blockquote>${mdInline(bq[1])}</blockquote>`);
-      continue;
-    }
+      // ── Course modal (lazy-loaded markdown) ─────────────────────────────────────
+      let _modalState = { sid: null, idx: 0, reqId: 0 };
+      const _mdCache = new Map(); // path → markdown text
 
-    // paragraph (close lists if continuing at root indent)
-    closeAllLists();
-    para.push(line.trim());
-  }
+      async function fetchMarkdown(path) {
+        if (_mdCache.has(path)) return _mdCache.get(path);
+        const resp = await fetch(path);
+        if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+        const text = await resp.text();
+        _mdCache.set(path, text);
+        return text;
+      }
 
-  flushPara();
-  closeAllLists();
-  flushTable();
-  if (inCode) out.push(`<pre><code>${mdEscape(codeBuf.join('\n'))}</code></pre>`);
-  return out.join('\n');
-}
-
-// ── Course modal (lazy-loaded markdown) ─────────────────────────────────────
-let _modalState = { sid: null, idx: 0, reqId: 0 };
-const _mdCache = new Map(); // path → markdown text
-
-async function fetchMarkdown(path) {
-  if (_mdCache.has(path)) return _mdCache.get(path);
-  const resp = await fetch(path);
-  if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
-  const text = await resp.text();
-  _mdCache.set(path, text);
-  return text;
-}
-
-function openCourse(sid) {
-  const mods = COURSES[sid] || [];
-  if (!mods.length) return;
-  _modalState = { sid, idx: 0, reqId: _modalState.reqId + 1 };
-  const phase = PHASES.find(p => allSessions(p).some(s => s.id === sid));
-  const session = phase ? allSessions(phase).find(s => s.id === sid) : null;
-  document.getElementById('course-modal-title').textContent =
-    session ? `${session.day} — ${session.label}` : sid;
-  renderModalTabs();
-  loadModalBody();
-  const m = document.getElementById('course-modal');
-  m.classList.add('open');
-  m.setAttribute('aria-hidden', 'false');
-  document.body.style.overflow = 'hidden';
-}
-function closeCourse() {
-  const m = document.getElementById('course-modal');
-  m.classList.remove('open');
-  m.setAttribute('aria-hidden', 'true');
-  document.body.style.overflow = '';
-}
-function renderModalTabs() {
-  const mods = COURSES[_modalState.sid] || [];
-  const tabs = document.getElementById('course-modal-tabs');
-  if (mods.length <= 1) { tabs.innerHTML = ''; return; }
-  tabs.innerHTML = mods.map((m, i) =>
-    `<button class="modal-tab${i === _modalState.idx ? ' active' : ''}" data-tab="${i}">${m.title}</button>`
-  ).join('');
-  tabs.querySelectorAll('.modal-tab').forEach(b => {
-    b.addEventListener('click', () => {
-      _modalState.idx = parseInt(b.dataset.tab, 10);
-      renderModalTabs();
-      loadModalBody();
-    });
-  });
-}
-async function loadModalBody() {
-  const mods = COURSES[_modalState.sid] || [];
-  const mod = mods[_modalState.idx];
-  const body = document.getElementById('course-modal-body');
-  if (!mod) { body.innerHTML = '<em>Aucun contenu</em>'; body.classList.add('empty'); return; }
-  const reqId = _modalState.reqId;
-  body.classList.remove('empty');
-  if (_mdCache.has(mod.path)) {
-    body.innerHTML = renderMarkdown(_mdCache.get(mod.path));
-    body.scrollTop = 0;
-    return;
-  }
-  body.innerHTML = `<p style="color:var(--muted)">Chargement de <code>${mod.path}</code>…</p>`;
-  try {
-    const text = await fetchMarkdown(mod.path);
-    if (reqId !== _modalState.reqId) return; // user moved on
-    body.innerHTML = renderMarkdown(text);
-    body.scrollTop = 0;
-  } catch (err) {
-    if (reqId !== _modalState.reqId) return;
-    body.innerHTML = `
+      function openCourse(sid) {
+        const mods = COURSES[sid] || [];
+        if (!mods.length) return;
+        _modalState = { sid, idx: 0, reqId: _modalState.reqId + 1 };
+        const phase = PHASES.find((p) =>
+          allSessions(p).some((s) => s.id === sid),
+        );
+        const session = phase
+          ? allSessions(phase).find((s) => s.id === sid)
+          : null;
+        document.getElementById("course-modal-title").textContent = session
+          ? `${session.day} — ${session.label}`
+          : sid;
+        renderModalTabs();
+        loadModalBody();
+        const m = document.getElementById("course-modal");
+        m.classList.add("open");
+        m.setAttribute("aria-hidden", "false");
+        document.body.style.overflow = "hidden";
+      }
+      function closeCourse() {
+        const m = document.getElementById("course-modal");
+        m.classList.remove("open");
+        m.setAttribute("aria-hidden", "true");
+        document.body.style.overflow = "";
+      }
+      function renderModalTabs() {
+        const mods = COURSES[_modalState.sid] || [];
+        const tabs = document.getElementById("course-modal-tabs");
+        if (mods.length <= 1) {
+          tabs.innerHTML = "";
+          return;
+        }
+        tabs.innerHTML = mods
+          .map(
+            (m, i) =>
+              `<button class="modal-tab${i === _modalState.idx ? " active" : ""}" data-tab="${i}">${m.title}</button>`,
+          )
+          .join("");
+        tabs.querySelectorAll(".modal-tab").forEach((b) => {
+          b.addEventListener("click", () => {
+            _modalState.idx = parseInt(b.dataset.tab, 10);
+            renderModalTabs();
+            loadModalBody();
+          });
+        });
+      }
+      async function loadModalBody() {
+        const mods = COURSES[_modalState.sid] || [];
+        const mod = mods[_modalState.idx];
+        const body = document.getElementById("course-modal-body");
+        if (!mod) {
+          body.innerHTML = "<em>Aucun contenu</em>";
+          body.classList.add("empty");
+          return;
+        }
+        const reqId = _modalState.reqId;
+        body.classList.remove("empty");
+        if (_mdCache.has(mod.path)) {
+          body.innerHTML = renderMarkdown(_mdCache.get(mod.path));
+          body.scrollTop = 0;
+          return;
+        }
+        body.innerHTML = `<p style="color:var(--muted)">Chargement de <code>${mod.path}</code>…</p>`;
+        try {
+          const text = await fetchMarkdown(mod.path);
+          if (reqId !== _modalState.reqId) return; // user moved on
+          body.innerHTML = renderMarkdown(text);
+          body.scrollTop = 0;
+        } catch (err) {
+          if (reqId !== _modalState.reqId) return;
+          body.innerHTML = `
       <p style="color:#ef4444"><strong>Impossible de charger <code>${mod.path}</code></strong></p>
       <p style="color:var(--muted);font-size:.85rem">${err.message}</p>
       <p style="color:var(--muted);font-size:.8rem">
         Astuce&nbsp;: si vous ouvrez ce fichier via <code>file://</code>, les <code>fetch</code> locaux peuvent être bloqués par le navigateur.
         Servez le dossier avec <code>python -m http.server</code> puis ouvrez <code>http://localhost:8000/avancement.html</code>.
       </p>`;
-  }
-}
+        }
+      }
 
-document.addEventListener('click', e => {
-  if (e.target.closest('[data-modal-close]')) { closeCourse(); }
-});
-document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') closeCourse();
-});
+      document.addEventListener("click", (e) => {
+        if (e.target.closest("[data-modal-close]")) {
+          closeCourse();
+        }
+      });
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") closeCourse();
+      });
 
-function renderMilestoneCard(phase, state) {
-  const m = phase.milestone;
-  const unlocked = isPhaseComplete(phase, state);
-  return `
-    <div class="phase-milestone ${unlocked?'unlocked':''}">
-      <div class="pm-icon">${unlocked ? '🏆' : '⬛'}</div>
+      function renderMilestoneCard(phase, state) {
+        const m = phase.milestone;
+        const unlocked = isPhaseComplete(phase, state);
+        return `
+    <div class="phase-milestone ${unlocked ? "unlocked" : ""}">
+      <div class="pm-icon">${unlocked ? "🏆" : "⬛"}</div>
       <div class="pm-info">
         <div class="pm-title">${m.label} — ${m.date}</div>
         <div class="pm-skills">${m.skills}</div>
       </div>
-      <div class="pm-status">${unlocked ? 'DÉBLOQUÉ ✓' : 'Verrouillé'}</div>
+      <div class="pm-status">${unlocked ? "DÉBLOQUÉ ✓" : "Verrouillé"}</div>
     </div>
   `;
-}
+      }
 
-function resetAll() {
-  if (confirm('Réinitialiser toute la progression ? Cette action est irréversible.')) {
-    localStorage.removeItem(LS_KEY);
-    render();
-  }
-}
+      function resetAll() {
+        if (
+          confirm(
+            "Réinitialiser toute la progression ? Cette action est irréversible.",
+          )
+        ) {
+          localStorage.removeItem(LS_KEY);
+          render();
+        }
+      }
 
-render();
-</script>
-</body>
+      // First session (in timeline order) not yet ticked — where the learner left off.
+      function firstUncheckedSid(state) {
+        for (const p of PHASES)
+          for (const s of allSessions(p)) {
+            if (!state[s.id]) return s.id;
+          }
+        return null;
+      }
+
+      render();
+
+      // On page open, glide to the first unticked lesson so the learner lands where they left off.
+      // Only runs once on load — not on every render() — so ticking a box never triggers a scroll.
+      (function scrollToFirstUnchecked() {
+        if (!autoscrollOn()) return; // disabled via the header toggle
+        const sid = firstUncheckedSid(load());
+        if (!sid) return; // everything done — nothing to scroll to
+        const el = document.getElementById("sess-" + sid);
+        if (el)
+          setTimeout(
+            () => el.scrollIntoView({ behavior: "smooth", block: "center" }),
+            5000,
+          );
+      })();
+    </script>
+  </body>
 </html>
