@@ -77,19 +77,6 @@
         color: var(--muted);
         margin-top: 4px;
       }
-      .autoscroll-toggle {
-        display: flex;
-        align-items: center;
-        justify-content: flex-end;
-        gap: 6px;
-        font-size: 0.72rem;
-        color: var(--muted);
-        margin-top: 6px;
-        cursor: pointer;
-      }
-      .autoscroll-toggle input {
-        cursor: pointer;
-      }
 
       /* STATS */
       .stats {
@@ -314,6 +301,7 @@
         align-items: baseline;
         gap: 8px;
         margin-bottom: 6px;
+        cursor: pointer;
       }
       .week-num {
         font-size: 0.65rem;
@@ -330,6 +318,21 @@
         font-size: 0.7rem;
         color: var(--muted);
         margin-left: auto;
+      }
+      .week-chevron {
+        color: var(--muted);
+        font-size: 0.7rem;
+        transition: transform 0.2s;
+        flex-shrink: 0;
+      }
+      .week.open .week-chevron {
+        transform: rotate(180deg);
+      }
+      .week-body {
+        display: none;
+      }
+      .week.open .week-body {
+        display: block;
       }
 
       /* SESSIONS */
@@ -774,6 +777,46 @@
         margin-top: 8px;
       }
 
+      /* IMPORT / EXPORT PILLS — fixed to the top-right of the viewport */
+      .io-pills {
+        position: fixed;
+        top: 12px;
+        right: 12px;
+        display: flex;
+        gap: 6px;
+        z-index: 100;
+      }
+      .io-pill {
+        background: var(--card);
+        border: 1px solid var(--border);
+        color: var(--muted);
+        border-radius: 999px;
+        padding: 6px 14px;
+        font-size: 0.72rem;
+        cursor: pointer;
+        transition: all 0.15s;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+      }
+      .io-pill:hover {
+        border-color: var(--gold);
+        color: var(--text);
+      }
+      /* JUMP-TO-NEXT-LESSON — sticky, just below the import/export pills */
+      .jump-nav {
+        position: fixed;
+        top: 48px;
+        right: 12px;
+        z-index: 100;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 6px;
+      }
+      .jump-pill {
+        border-color: var(--gold);
+        color: var(--text);
+      }
+
       /* CONFETTI */
       .confetti-wrap {
         position: fixed;
@@ -813,6 +856,46 @@
     </style>
   </head>
   <body>
+    <div class="io-pills">
+      <button
+        class="io-pill"
+        onclick="exportProgress()"
+        title="Télécharger la progression dans un fichier JSON"
+      >
+        📤 Exporter
+      </button>
+      <button
+        class="io-pill"
+        onclick="document.getElementById('import-file').click()"
+        title="Charger la progression depuis un fichier JSON"
+      >
+        📥 Importer
+      </button>
+      <input
+        type="file"
+        id="import-file"
+        accept="application/json,.json"
+        hidden
+      />
+    </div>
+    <div class="jump-nav">
+      <button
+        class="io-pill jump-pill"
+        onclick="scrollToNextLesson()"
+        title="Aller à la prochaine leçon non terminée"
+      >
+        ⤵ Prochaine leçon
+      </button>
+      <button
+        id="expand-all-btn"
+        class="io-pill"
+        onclick="toggleExpandAll()"
+        title="Déplier ou replier toutes les phases et semaines"
+      >
+        ▾ Tout déplier
+      </button>
+    </div>
+
     <div id="app"></div>
     <div id="confetti-wrap" class="confetti-wrap"></div>
 
@@ -2103,6 +2186,31 @@
 
       const LS_KEY = "noledj_v1";
 
+      function scrollToNextLesson() {
+        const sid = firstUncheckedSid(load());
+        if (!sid) return; // everything done — nothing to scroll to
+
+        const el = document.getElementById("sess-" + sid);
+        if (!el) return;
+
+        el.closest(".week")?.classList.add("open");
+        el.closest(".phase")?.classList.add("open");
+        requestAnimationFrame(() =>
+          el.scrollIntoView({ behavior: "smooth", block: "center" }),
+        );
+      }
+
+      function toggleExpandAll() {
+        const groups = document.querySelectorAll(".phase, .week");
+        const anyClosed = [...groups].some(
+          (g) => !g.classList.contains("open"),
+        );
+        groups.forEach((g) => g.classList.toggle("open", anyClosed));
+        const btn = document.getElementById("expand-all-btn");
+        if (btn)
+          btn.textContent = anyClosed ? "▴ Tout replier" : "▾ Tout déplier";
+      }
+
       function load() {
         try {
           return JSON.parse(localStorage.getItem(LS_KEY) || "{}");
@@ -2112,15 +2220,6 @@
       }
       function save(state) {
         localStorage.setItem(LS_KEY, JSON.stringify(state));
-      }
-
-      // Autoscroll-on-load preference — its own key so "Réinitialiser" doesn't clear it. Default on.
-      const AUTOSCROLL_KEY = "noledj_autoscroll";
-      function autoscrollOn() {
-        return localStorage.getItem(AUTOSCROLL_KEY) !== "0";
-      }
-      function setAutoscroll(on) {
-        localStorage.setItem(AUTOSCROLL_KEY, on ? "1" : "0");
       }
 
       function allSessions(phase) {
@@ -2197,12 +2296,12 @@
           el.className = "cp";
           const size = 4 + Math.random() * 8;
           el.style.cssText = `
-      left:${Math.random() * 100}%;top:-12px;
-      width:${size}px;height:${size}px;
-      background:${colors[Math.floor(Math.random() * colors.length)]};
-      animation-delay:${Math.random() * 0.6}s;
-      animation-duration:${1.4 + Math.random() * 1.6}s;
-    `;
+            left:${Math.random() * 100}%;top:-12px;
+            width:${size}px;height:${size}px;
+            background:${colors[Math.floor(Math.random() * colors.length)]};
+            animation-delay:${Math.random() * 0.6}s;
+            animation-duration:${1.4 + Math.random() * 1.6}s;
+          `;
           wrap.appendChild(el);
           setTimeout(() => el.remove(), 3200);
         }
@@ -2230,77 +2329,73 @@
 
         document.getElementById("app").innerHTML =
           `
-    <div class="header">
-      <h1>Noledj — Tableau de bord</h1>
-      <p>1ᵉʳ juin → 15 octobre 2026 &nbsp;·&nbsp; 20 semaines · 5 phases · 5 jalons</p>
-      <div class="global-bar-wrap"><div class="global-bar" style=\"width:` +
+            <div class="header">
+              <h1>Noledj — Tableau de bord</h1>
+              <p>1ᵉʳ juin → 15 octobre 2026 &nbsp;·&nbsp; 20 semaines · 5 phases · 5 jalons</p>
+              <div class="global-bar-wrap"><div class="global-bar" style=\"width:` +
           pct +
           `%\"></div></div>
-      <div class="global-pct">${pct} % &nbsp;·&nbsp; ${stats.hours} h / ${TOTAL_HOURS} h</div>
-      <label class="autoscroll-toggle">
-        <input type="checkbox" id="autoscroll-cb" ${autoscrollOn() ? "checked" : ""}>
-        Défiler jusqu'à la prochaine leçon à l'ouverture
-      </label>
-    </div>
+              <div class="global-pct">${pct} % &nbsp;·&nbsp; ${stats.hours} h / ${TOTAL_HOURS} h</div>
+            </div>
 
-    <div class="stats">
-      <div class="stat">
-        <div class="stat-value">${stats.hours}<span style="font-size:.85rem;color:var(--muted)"> h</span></div>
-        <div class="stat-label">Heures planifiées</div>
-        ${stats.actualEntered > 0 ? `<div class="stat-sub">réel <b>${formatHours(stats.actual)} h</b> · ${stats.actualEntered}/${stats.total}</div>` : ""}
-      </div>
-      <div class="stat">
-        <div class="stat-value">${stats.sessions}<span style="font-size:.85rem;color:var(--muted)"> / ${stats.total}</span></div>
-        <div class="stat-label">Sessions</div>
-      </div>
-      <div class="stat">
-        <div class="stat-value">${pct}<span style="font-size:.85rem;color:var(--muted)"> %</span></div>
-        <div class="stat-label">Progression</div>
-      </div>
-      <div class="stat">
-        <div class="stat-value">${curWeek}<span style="font-size:.85rem;color:var(--muted)"> / 20</span></div>
-        <div class="stat-label">Semaine</div>
-      </div>
-    </div>
+            <div class="stats">
+              <div class="stat">
+                <div class="stat-value">${stats.hours}<span style="font-size:.85rem;color:var(--muted)"> h</span></div>
+                <div class="stat-label">Heures planifiées</div>
+                ${stats.actualEntered > 0 ? `<div class="stat-sub">réel <b>${formatHours(stats.actual)} h</b> · ${stats.actualEntered}/${stats.total}</div>` : ""}
+              </div>
+              <div class="stat">
+                <div class="stat-value">${stats.sessions}<span style="font-size:.85rem;color:var(--muted)"> / ${stats.total}</span></div>
+                <div class="stat-label">Sessions</div>
+              </div>
+              <div class="stat">
+                <div class="stat-value">${pct}<span style="font-size:.85rem;color:var(--muted)"> %</span></div>
+                <div class="stat-label">Progression</div>
+              </div>
+              <div class="stat">
+                <div class="stat-value">${curWeek}<span style="font-size:.85rem;color:var(--muted)"> / 20</span></div>
+                <div class="stat-label">Semaine</div>
+              </div>
+            </div>
 
-    <div class="indicator">
-      <div>
-        <div class="indicator-label">Indicateur sem. ${curWeek}</div>
-        <div class="indicator-val ${deltaCls}">${stats.hours} h <span style="font-size:.75rem;color:var(--muted);font-weight:400">/ ${expected} h attendues</span></div>
-      </div>
-      <div class="indicator-msg ${deltaCls}">${deltaMsg}</div>
-    </div>
+            <div class="indicator">
+              <div>
+                <div class="indicator-label">Indicateur sem. ${curWeek}</div>
+                <div class="indicator-val ${deltaCls}">${stats.hours} h <span style="font-size:.75rem;color:var(--muted);font-weight:400">/ ${expected} h attendues</span></div>
+              </div>
+              <div class="indicator-msg ${deltaCls}">${deltaMsg}</div>
+            </div>
 
-    <div class="milestones-section">
-      <div class="section-title">Jalons</div>
-      <div class="milestones-row">
-        ${PHASES.map((p) => {
-          const done = isPhaseComplete(p, state);
-          return `<div class="milestone ${done ? "done" : ""}">
-            <div class="m-dot">${done ? "✓" : p.milestone.num}</div>
-            <div class="m-label">${p.milestone.label}</div>
-            <div class="m-date">${p.milestone.date}</div>
-          </div>`;
-        }).join("")}
-      </div>
-    </div>
+            <div class="milestones-section">
+              <div class="section-title">Jalons</div>
+              <div class="milestones-row">
+                ${PHASES.map((p) => {
+                  const done = isPhaseComplete(p, state);
+                  return `<div class="milestone ${done ? "done" : ""}">
+                    <div class="m-dot">${done ? "✓" : p.milestone.num}</div>
+                    <div class="m-label">${p.milestone.label}</div>
+                    <div class="m-date">${p.milestone.date}</div>
+                  </div>`;
+                }).join("")}
+              </div>
+            </div>
 
-    <div class="phases">
-      ${(() => {
-        const firstIncomplete = PHASES.findIndex(
-          (p) => !isPhaseComplete(p, state),
-        );
-        return PHASES.map((p, i) =>
-          renderPhase(p, state, i, firstIncomplete),
-        ).join("");
-      })()}
-    </div>
+            <div class="phases">
+              ${(() => {
+                const firstIncomplete = PHASES.findIndex(
+                  (p) => !isPhaseComplete(p, state),
+                );
+                return PHASES.map((p, i) =>
+                  renderPhase(p, state, i, firstIncomplete),
+                ).join("");
+              })()}
+            </div>
 
-    <div class="footer">
-      <button class="btn-reset" onclick="resetAll()">Réinitialiser la progression</button>
-      <div class="footer-note">Données stockées dans localStorage — aucun serveur</div>
-    </div>
-  `;
+            <div class="footer">
+              <button class="btn-reset" onclick="resetAll()">Réinitialiser la progression</button>
+              <div class="footer-note">Données stockées dans localStorage — aucun serveur</div>
+            </div>
+          `;
 
         // wire checkboxes
         document.querySelectorAll("input[data-sid]").forEach((cb) => {
@@ -2344,12 +2439,12 @@
           );
         });
 
-        // wire autoscroll preference toggle
-        const asCb = document.getElementById("autoscroll-cb");
-        if (asCb)
-          asCb.addEventListener("change", (e) =>
-            setAutoscroll(e.target.checked),
+        // wire week toggles
+        document.querySelectorAll(".week-header").forEach((h) => {
+          h.addEventListener("click", () =>
+            h.closest(".week").classList.toggle("open"),
           );
+        });
 
         // wire course-open anchors
         document.querySelectorAll("a[data-open-sid]").forEach((a) => {
@@ -2387,46 +2482,54 @@
 
         return (
           `
-    <div class="phase ${isOpen ? "open" : ""}">
-      <div class="phase-header">
-        <div class="phase-accent" style=\"background:` +
+            <div class="phase ${isOpen ? "open" : ""}">
+              <div class="phase-header">
+                <div class="phase-accent" style=\"background:` +
           phase.color +
           `\"></div>
-        <div class="phase-info">
-          <div class="phase-name">${phase.name}</div>
-          <div class="phase-meta">${phase.dateRange} &nbsp;·&nbsp; ${done}/${total} sessions &nbsp;·&nbsp; ${hoursD} h / ${hoursT} h${actualSuffix}</div>
-        </div>
-        <div class="phase-prog-wrap">
-          <div class="phase-bar"><div class="phase-bar-fill" style=\"width:` +
+                <div class="phase-info">
+                  <div class="phase-name">${phase.name}</div>
+                  <div class="phase-meta">${phase.dateRange} &nbsp;·&nbsp; ${done}/${total} sessions &nbsp;·&nbsp; ${hoursD} h / ${hoursT} h${actualSuffix}</div>
+                </div>
+                <div class="phase-prog-wrap">
+                  <div class="phase-bar"><div class="phase-bar-fill" style=\"width:` +
           `${pct}%;background:${phase.color}` +
           `\"></div></div>
-          <div class="phase-pct">${pct} %</div>
-        </div>
-        <div class="phase-chevron">▼</div>
-      </div>
-      <div class="phase-body">
-        ${phase.weeks.map((w) => renderWeek(w, state, phase.color)).join("")}
-        ${renderMilestoneCard(phase, state)}
-      </div>
-    </div>
-  `
+                  <div class="phase-pct">${pct} %</div>
+                </div>
+                <div class="phase-chevron">▼</div>
+              </div>
+              <div class="phase-body">
+                ${phase.weeks.map((w) => renderWeek(w, state, phase.color)).join("")}
+                ${renderMilestoneCard(phase, state)}
+              </div>
+            </div>
+          `
         );
       }
 
+      function isWeekComplete(week, state) {
+        return week.sessions.every((s) => state[s.id]);
+      }
+
       function renderWeek(week, state, color) {
+        const open = !isWeekComplete(week, state); // finished weeks start collapsed
         return (
           `
-    <div class="week">
-      <div class="week-header">
-        <span class="week-num">Sem. ${week.num}</span>
-        <span class="week-topic" style=\"color:` +
+            <div class="week${open ? " open" : ""}">
+              <div class="week-header">
+                <span class="week-num">Sem. ${week.num}</span>
+                <span class="week-topic" style=\"color:` +
           color +
           `\">${week.topic}</span>
-        <span class="week-dates">${week.dates}</span>
-      </div>
-      ${week.sessions.map((s) => renderSession(s, state)).join("")}
-    </div>
-  `
+                <span class="week-dates">${week.dates}</span>
+                <span class="week-chevron">▾</span>
+              </div>
+              <div class="week-body">
+                ${week.sessions.map((s) => renderSession(s, state)).join("")}
+              </div>
+            </div>
+          `
         );
       }
 
@@ -2793,12 +2896,74 @@
   `;
       }
 
-      function resetAll() {
-        if (
-          confirm(
-            "Réinitialiser toute la progression ? Cette action est irréversible.",
+      // Export the localStorage progress (key noledj_v1) as a downloadable JSON file.
+      function exportProgress() {
+        const payload = {
+          app: "noledj",
+          version: 1,
+          exportedAt: new Date().toISOString(),
+          progress: load(),
+        };
+        const blob = new Blob([JSON.stringify(payload, null, 2)], {
+          type: "application/json",
+        });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `noledj-progress-${new Date().toISOString().slice(0, 10)}.json`;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(url);
+      }
+
+      // Import a JSON file (either the wrapped export or a raw state object) into localStorage.
+      function importProgress(file) {
+        const reader = new FileReader();
+        reader.onload = () => {
+          let data;
+          try {
+            data = JSON.parse(reader.result);
+          } catch {
+            alert("Fichier invalide : JSON illisible.");
+            return;
+          }
+          const progress =
+            data && typeof data.progress === "object" && data.progress
+              ? data.progress
+              : data && typeof data === "object"
+                ? data
+                : null;
+          if (!progress) {
+            alert("Fichier invalide : aucune progression trouvée.");
+            return;
+          }
+          if (
+            !confirm(
+              "Remplacer la progression actuelle par le fichier importé ?",
+            )
           )
-        ) {
+            return;
+          save(progress);
+          render();
+          alert("Progression importée ✓");
+        };
+        reader.onerror = () => alert("Erreur de lecture du fichier.");
+        reader.readAsText(file);
+      }
+
+      // Wire the hidden file input once (it lives outside #app, so render() never touches it).
+      document.getElementById("import-file").addEventListener("change", (e) => {
+        const f = e.target.files[0];
+        if (f) importProgress(f);
+        e.target.value = ""; // reset so re-selecting the same file fires 'change' again
+      });
+
+      function resetAll() {
+        const hasConfirmed = confirm(
+          "Réinitialiser toute la progression ? Cette action est irréversible.",
+        );
+        if (hasConfirmed) {
           localStorage.removeItem(LS_KEY);
           render();
         }
@@ -2814,20 +2979,6 @@
       }
 
       render();
-
-      // On page open, glide to the first unticked lesson so the learner lands where they left off.
-      // Only runs once on load — not on every render() — so ticking a box never triggers a scroll.
-      (function scrollToFirstUnchecked() {
-        if (!autoscrollOn()) return; // disabled via the header toggle
-        const sid = firstUncheckedSid(load());
-        if (!sid) return; // everything done — nothing to scroll to
-        const el = document.getElementById("sess-" + sid);
-        if (el)
-          setTimeout(
-            () => el.scrollIntoView({ behavior: "smooth", block: "center" }),
-            5000,
-          );
-      })();
     </script>
   </body>
 </html>

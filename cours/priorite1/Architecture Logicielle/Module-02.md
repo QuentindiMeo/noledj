@@ -67,12 +67,12 @@ Aucun de ces axes n'est gagnable seul. Améliorer le couplage coûte du temps. R
 
 ### Lecture par axe
 
-| Axe                          | Évaluation                                                                                  |
-| ---------------------------- | ------------------------------------------------------------------------------------------- |
-| **Couplage**                 | Neutre — n-tier ne contraint pas le couplage applicatif.                                    |
-| **Complexité opérationnelle** | Faible à modérée. Bien outillée par les fournisseurs cloud.                                |
-| **Time-to-market**           | Bon dès la V1. La topologie ne ralentit pas la livraison.                                   |
-| **Coût**                     | Coût d'entrée non-nul (3 services minimum). Linéaire avec le trafic.                        |
+| Axe                           | Évaluation                                                           |
+| ----------------------------- | -------------------------------------------------------------------- |
+| **Couplage**                  | Neutre — n-tier ne contraint pas le couplage applicatif.             |
+| **Complexité opérationnelle** | Faible à modérée. Bien outillée par les fournisseurs cloud.          |
+| **Time-to-market**            | Bon dès la V1. La topologie ne ralentit pas la livraison.            |
+| **Coût**                      | Coût d'entrée non-nul (3 services minimum). Linéaire avec le trafic. |
 
 ### Signaux d'alerte
 
@@ -99,12 +99,12 @@ Aucun de ces axes n'est gagnable seul. Améliorer le couplage coûte du temps. R
 
 ### Lecture par axe
 
-| Axe                          | Évaluation                                                                                  |
-| ---------------------------- | ------------------------------------------------------------------------------------------- |
-| **Couplage**                 | Vertical contraint (chaque couche ne voit que celle du dessous) ; horizontal libre, donc fragile. |
-| **Complexité opérationnelle** | Identique à l'architecture sous-jacente (n-tier ou monolithe). La couche est interne.      |
-| **Time-to-market**           | Bon, surtout en début de projet. Le coût d'entrée est faible.                               |
-| **Coût**                     | Coût caché du _mapping_ entre couches sur le long terme.                                   |
+| Axe                           | Évaluation                                                                                        |
+| ----------------------------- | ------------------------------------------------------------------------------------------------- |
+| **Couplage**                  | Vertical contraint (chaque couche ne voit que celle du dessous) ; horizontal libre, donc fragile. |
+| **Complexité opérationnelle** | Identique à l'architecture sous-jacente (n-tier ou monolithe). La couche est interne.             |
+| **Time-to-market**            | Bon, surtout en début de projet. Le coût d'entrée est faible.                                     |
+| **Coût**                      | Coût caché du _mapping_ entre couches sur le long terme.                                          |
 
 ### Signaux d'alerte
 
@@ -132,12 +132,12 @@ Aucun de ces axes n'est gagnable seul. Améliorer le couplage coûte du temps. R
 
 ### Lecture par axe
 
-| Axe                          | Évaluation                                                                                  |
-| ---------------------------- | ------------------------------------------------------------------------------------------- |
-| **Couplage**                 | Très faible vers l'infrastructure. C'est la promesse centrale.                              |
-| **Complexité opérationnelle** | Inchangée — l'hexagonal porte sur le code, pas sur le déploiement.                         |
-| **Time-to-market**           | Lent au début (coût d'amorçage). Rapide ensuite, surtout pour les évolutions infra.        |
-| **Coût**                     | Investissement initial, gain composé sur la durée de vie du projet.                         |
+| Axe                           | Évaluation                                                                          |
+| ----------------------------- | ----------------------------------------------------------------------------------- |
+| **Couplage**                  | Minimal vers l'infrastructure. C'est la promesse centrale.                          |
+| **Complexité opérationnelle** | Inchangée — l'hexagonal porte sur le code, pas sur le déploiement.                  |
+| **Time-to-market**            | Lent au début (coût d'amorçage). Rapide ensuite, surtout pour les évolutions infra. |
+| **Coût**                      | Investissement initial, gain composé sur la durée de vie du projet.                 |
 
 ### Signaux d'alerte
 
@@ -166,12 +166,12 @@ Aucun de ces axes n'est gagnable seul. Améliorer le couplage coûte du temps. R
 
 ### Lecture par axe
 
-| Axe                          | Évaluation                                                                                  |
-| ---------------------------- | ------------------------------------------------------------------------------------------- |
-| **Couplage**                 | Théoriquement faible. Pratiquement, dépend entièrement de la qualité du découpage.          |
-| **Complexité opérationnelle** | Très élevée. À ne pas sous-estimer.                                                        |
-| **Time-to-market**           | Très lent en début de projet. Devient bon à l'échelle (>5 équipes parallèles).             |
-| **Coût**                     | Élevé en infrastructure et en ingénieurs. Justifié seulement si le scale humain le demande. |
+| Axe                           | Évaluation                                                                                  |
+| ----------------------------- | ------------------------------------------------------------------------------------------- |
+| **Couplage**                  | Théoriquement faible. Pratiquement, dépend entièrement de la qualité du découpage.          |
+| **Complexité opérationnelle** | Très élevée. À ne pas sous-estimer.                                                         |
+| **Time-to-market**            | Très lent en début de projet. Devient bon à l'échelle (>5 équipes parallèles).              |
+| **Coût**                      | Élevé en infrastructure et en ingénieurs. Justifié seulement si le scale humain le demande. |
 
 ### Signaux d'alerte (microservices prématurés)
 
@@ -185,12 +185,12 @@ Aucun de ces axes n'est gagnable seul. Améliorer le couplage coûte du temps. R
 
 ## 6. Tableau de synthèse
 
-| Architecture             | Couplage                              | Complexité op.       | Time-to-market V1 | Time-to-market V+N | Coût d'entrée     | Coût à l'échelle      |
-| ------------------------ | ------------------------------------- | -------------------- | ----------------- | ------------------ | ------------------ | --------------------- |
-| **n-tier (3-tier)**      | Neutre                                | Faible à modérée     | Bon               | Bon                | Faible             | Linéaire avec trafic  |
-| **En couche (classique)** | Vertical contraint, horizontal libre  | Identique au support | Très bon          | Se dégrade         | Très faible        | Coût de _mapping_ caché |
-| **Oignon / hexagonal**   | Très faible vers l'infrastructure     | Identique au support | Lent              | Très bon           | Modéré             | Modéré, amorti        |
-| **Microservice**         | Faible si bien fait, sinon désastreux | Très élevée          | Très lent         | Très bon à l'échelle | Élevé             | Élevé mais scalable   |
+| Architecture              | Couplage                              | Complexité op.       | Time-to-market V1 | Time-to-market V+N   | Coût d'entrée | Coût à l'échelle        |
+| ------------------------- | ------------------------------------- | -------------------- | ----------------- | -------------------- | ------------- | ----------------------- |
+| **n-tier (3-tier)**       | Neutre                                | Faible à modérée     | Bon               | Bon                  | Faible        | Linéaire avec trafic    |
+| **En couche (classique)** | Vertical contraint, horizontal libre  | Identique au support | Très bon          | Se dégrade           | Très faible   | Coût de _mapping_ caché |
+| **Oignon / hexagonal**    | Minimal vers l'infrastructure         | Identique au support | Lent              | Très bon             | Modéré        | Modéré, amorti          |
+| **Microservice**          | Faible si bien fait, sinon désastreux | Très élevée          | Très lent         | Très bon à l'échelle | Élevé         | Élevé mais scalable     |
 
 ---
 

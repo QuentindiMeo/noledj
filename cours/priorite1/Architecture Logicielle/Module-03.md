@@ -125,14 +125,14 @@ Les deux côtés peuvent vivre dans le **même processus** (CQRS logique) ou dan
 
 ### Tableau de différences clés
 
-| Axe                          | CRUD                                | CQRS                                           |
-| ---------------------------- | ----------------------------------- | ---------------------------------------------- |
-| **Modèle**                   | Un seul                             | Deux (Command / Query)                         |
-| **Stockage**                 | Une table par entité                | Une table source + projections de lecture      |
-| **Validation métier**        | Mêlée à la lecture                  | Concentrée côté commande                       |
-| **Optimisation des reads**   | Index sur la table principale       | Vues dénormalisées dédiées                     |
-| **Cohérence**                | Forte (transaction unique)          | Forte côté write, éventuelle côté read         |
-| **Complexité**               | Faible                              | Modérée à élevée                               |
+| Axe                        | CRUD                          | CQRS                                      |
+| -------------------------- | ----------------------------- | ----------------------------------------- |
+| **Modèle**                 | Un seul                       | Deux (Command / Query)                    |
+| **Stockage**               | Une table par entité          | Une table source + projections de lecture |
+| **Validation métier**      | Mêlée à la lecture            | Concentrée côté commande                  |
+| **Optimisation des reads** | Index sur la table principale | Vues dénormalisées dédiées                |
+| **Cohérence**              | Forte (transaction unique)    | Forte côté write, éventuelle côté read    |
+| **Complexité**             | Faible                        | Modérée à élevée                          |
 
 ---
 
@@ -184,15 +184,15 @@ CQRS n'**est pas** un outil de collaboration en temps réel comme du _live editi
 
 Une seule base. Deux modèles applicatifs. Deux handlers.
 
-```
-┌─────────────┐     ┌─────────────────────┐     ┌─────────────┐
-│   Client    │ →   │  CommandHandler     │ →   │             │
-│             │     └─────────────────────┘     │   Base SQL  │
-│             │                                  │ unique      │
-│             │     ┌─────────────────────┐     │             │
-│             │ →   │  QueryHandler       │ ←   │             │
-└─────────────┘     │  (vues SQL / DTO)   │     └─────────────┘
-                    └─────────────────────┘
+```graphviz
+┌─────────────┐   ┌─────────────────────┐   ┌────────────┐
+│   Client    │ → │  CommandHandler     │ → │            │
+│             │   └─────────────────────┘   │  Base SQL  │
+│             │                             │   unique   │
+│             │   ┌─────────────────────┐   │            │
+│             │ → │  QueryHandler       │ ← │            │
+└─────────────┘   │  (vues SQL / DTO)   │   └────────────┘
+                  └─────────────────────┘
 ```
 
 - Les écritures passent par des **commands** validées et transactionnelles.
@@ -205,7 +205,7 @@ C'est la version **par défaut** quand on parle de CQRS sans préciser. Pertinen
 
 Une **base d'écriture** distincte d'une (ou plusieurs) **base de lecture**. Les écritures sur la première sont **propagées** vers les secondes via des événements.
 
-```
+```graphviz
                            ┌────────────────┐
                            │   Commands     │
                            └────────┬───────┘
@@ -218,10 +218,10 @@ Une **base d'écriture** distincte d'une (ou plusieurs) **base de lecture**. Les
                                │ events
                 ┌──────────────┼──────────────┐
                 ▼              ▼              ▼
-       ┌──────────────┐ ┌──────────────┐ ┌──────────────┐
-       │ Read DB #1   │ │ Read DB #2   │ │ Cache /      │
-       │ (rapports)   │ │ (recherche)  │ │ Elasticsearch│
-       └──────────────┘ └──────────────┘ └──────────────┘
+       ┌──────────────┐ ┌──────────────┐ ┌───────────────┐
+       │ Read DB #1   │ │ Read DB #2   │ │ Cache /       │
+       │ (rapports)   │ │ (recherche)  │ │ Elasticsearch │
+       └──────────────┘ └──────────────┘ └───────────────┘
 ```
 
 - **Cohérence éventuelle** côté lectures (lag de quelques ms à quelques secondes).
@@ -232,13 +232,13 @@ C'est la version **lourde**, à réserver à des contextes où l'asymétrie de c
 
 ### Tableau récapitulatif
 
-| Aspect                    | CQRS logique                          | CQRS physique                                  |
-| ------------------------- | ------------------------------------- | ---------------------------------------------- |
-| **Nombre de bases**       | 1                                     | 2+                                             |
-| **Cohérence**             | Forte                                 | Éventuelle (lag)                               |
-| **Complexité ops**        | Faible                                | Élevée (event bus, monitoring du lag)          |
-| **Cas d'usage**           | Logique métier riche, audit clair     | Asymétrie de charge majeure, stockages spécialisés |
-| **Quand l'introduire**    | Tôt, si l'on prévoit de la complexité métier | Tard, sur déclencheur métier / charge        |
+| Aspect                 | CQRS logique                                 | CQRS physique                                      |
+| ---------------------- | -------------------------------------------- | -------------------------------------------------- |
+| **Nombre de bases**    | 1                                            | 2+                                                 |
+| **Cohérence**          | Forte                                        | Éventuelle (lag)                                   |
+| **Complexité ops**     | Faible                                       | Élevée (event bus, monitoring du lag)              |
+| **Cas d'usage**        | Logique métier riche, audit clair            | Asymétrie de charge majeure, stockages spécialisés |
+| **Quand l'introduire** | Tôt, si l'on prévoit de la complexité métier | Tard, sur déclencheur métier / charge              |
 
 ---
 
@@ -538,8 +538,8 @@ Structure imposée :
 1. **Contexte** (3 lignes) — quel système, quelles personas.
 2. **Pourquoi pas CRUD ?** (5 à 8 lignes) — la douleur observée, l'asymétrie.
 3. **Découpage CQRS** :
-    - Diagramme **Commands** : 3 à 5 commands nommées avec un mot-clé chacune.
-    - Diagramme **Queries** : 2 à 3 vues par persona.
+   - Diagramme **Commands** : 3 à 5 commands nommées avec un mot-clé chacune.
+   - Diagramme **Queries** : 2 à 3 vues par persona.
 4. **Bénéfice attendu** (3 lignes) — ce qu'on cherche à obtenir.
 5. **Coût assumé** (3 lignes) — ce qu'on accepte comme contrepartie.
 6. **Quand y aller ?** (1 phrase) — le déclencheur qui justifie le passage.
